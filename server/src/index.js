@@ -33,10 +33,23 @@ app.use(
 // custom middleware logger
 app.use(logger);
 
+// Serve static files from the 'client/build' folder
+app.use(express.static(path.join(__dirname, "../../client/dist")));
+
+if (process.env.NODE_ENV === "production") {
+  const __dirname = path.resolve();
+
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"))
+  );
+} else {
+  app.get("/", (req, res) => res.send("Server is ready..."));
+}
+
 // endpoints
 app.get("/api", (req, res) => {
   console.log("API...");
-  return res.json({ msg: "HELLO WORLD" });
+  return res.json({ msg: "API ENDPOINT" });
 });
 
 app.use("/api/users", verifyToken, userRouter);
