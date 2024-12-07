@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import path from "path";
 import helmet from "helmet";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
@@ -40,7 +41,8 @@ if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();
 
   app.get("*", (req, res) =>
-    res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"))
+    // res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"))
+    res.sendFile(path.join(__dirname, "../../client/dist/index.html"))
   );
 } else {
   app.get("/", (req, res) => res.send("Server is ready..."));
