@@ -22,11 +22,11 @@ export default function Signup() {
       });
       console.log("DATA: ", data);
       setLogin(data.user);
-      toast.success("User is registered");
+      toast.success(data.msg);
       return navigate("/signin");
     } catch (error) {
       console.log(error);
-      return toast.error("Something went wrong");
+      return toast.error(error.response.data.error);
     }
   }
 

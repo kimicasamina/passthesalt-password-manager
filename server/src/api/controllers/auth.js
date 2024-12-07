@@ -7,27 +7,25 @@ export const registerUser = async (req, res, next) => {
   const { username, email, password } = req.body;
   let existingUser;
 
-  // check if user already exists
   try {
     existingUser = await User.findOne({ where: { email } });
-    console.log("USER", existingUser);
-
-    if (existingUser) {
-      return res
-        .status(401)
-        .json({ error: "User already registered. Sign in instead" });
-    }
-
-    const newUser = await User.create({
-      username,
-      email,
-      password,
-    });
-
-    return res.status(201).json({ msg: "Successfully created a new user" });
   } catch (error) {
     return res.status(401).json({ error: "Registration failed" });
   }
+
+  if (existingUser) {
+    return res
+      .status(401)
+      .json({ error: "User is registered already, sign in instead." });
+  }
+
+  const newUser = await User.create({
+    username,
+    email,
+    password,
+  });
+
+  return res.status(201).json({ msg: "Successfully created a new user" });
 };
 
 export const loginUser = async (req, res, next) => {
