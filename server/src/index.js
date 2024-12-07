@@ -14,6 +14,7 @@ import noteRouter from "./api/routes/note";
 import verifyToken from "./middleware/verifyToken";
 
 dotenv.config();
+
 const app = express();
 
 // middlewares
@@ -39,10 +40,10 @@ app.use(express.static(path.join(__dirname, "../../client/dist")));
 
 if (process.env.NODE_ENV === "production") {
   const __dirname = path.resolve();
+  const rootDir = path.resolve(__dirname, "..");
 
   app.get("*", (req, res) =>
-    // res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"))
-    res.sendFile(path.join(__dirname, "../../client/dist/index.html"))
+    res.sendFile(path.join(rootDir, "client", "dist", "index.html"))
   );
 } else {
   app.get("/", (req, res) => res.send("Server is ready..."));
