@@ -21,9 +21,8 @@ export default function Signup() {
         ...formData,
       });
       console.log("DATA: ", data);
-      setLogin(data.user);
       toast.success(data.msg);
-      return navigate("/signin");
+      navigate("/signin");
     } catch (error) {
       console.log(error);
       return toast.error(error.response.data.error);
