@@ -33,16 +33,19 @@ app.use(
 // custom middleware logger
 app.use(logger);
 
-// endpoints
-app.get("/api", (req, res) => {
-  console.log("API...");
-  return res.json({ msg: "HELLO WORLD" });
-});
-
 app.use("/api/users", verifyToken, userRouter);
 app.use("/api/logins", verifyToken, loginRouter);
 app.use("/api/notes", verifyToken, noteRouter);
 app.use("/api/auth", authRouter);
+
+if (process.env.NODE_ENV === "production") {
+  // Serve static files from the React app
+  app.use(express.static(path.resolve(__dirname, "../client/dist")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../client/dist", "index.html"));
+  });
+}
 
 // global error handler
 app.use("*", (err, req, res, next) => {
