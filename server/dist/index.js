@@ -3,11 +3,11 @@
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 var _express = _interopRequireDefault(require("express"));
 var _dotenv = _interopRequireDefault(require("dotenv"));
+var _path = _interopRequireDefault(require("path"));
 var _helmet = _interopRequireDefault(require("helmet"));
 var _bodyParser = _interopRequireDefault(require("body-parser"));
 var _cookieParser = _interopRequireDefault(require("cookie-parser"));
 var _cors = _interopRequireDefault(require("cors"));
-var _corsOption = _interopRequireDefault(require("./middleware/corsOption"));
 var _logEvents = require("./middleware/logEvents");
 var _connection = _interopRequireDefault(require("./db/config/connection"));
 var _user = _interopRequireDefault(require("./api/routes/user"));
@@ -33,16 +33,36 @@ app.use(_bodyParser["default"].urlencoded({
 app.use(_bodyParser["default"].json());
 app.use((0, _cookieParser["default"])());
 app.use((0, _helmet["default"])());
-app.use((0, _cors["default"])(_corsOption["default"]));
+app.use((0, _cors["default"])({
+  origin: process.env.CLIENT_URL,
+  // Your frontend URL
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  // Allow these HTTP methods
+  allowedHeaders: ["Content-Type"] // Allow specific headers
+}));
 
 // custom middleware logger
 app.use(_logEvents.logger);
+
+// Serve static files from the 'client/build' folder
+app.use(_express["default"]["static"](_path["default"].join(__dirname, "../../client/dist")));
+if (process.env.NODE_ENV === "production") {
+  var _dirname = _path["default"].resolve();
+  var rootDir = _path["default"].resolve(_dirname, "..");
+  app.get("*", function (req, res) {
+    return res.sendFile(_path["default"].join(rootDir, "client", "dist", "index.html"));
+  });
+} else {
+  app.get("/", function (req, res) {
+    return res.send("Server is ready...");
+  });
+}
 
 // endpoints
 app.get("/api", function (req, res) {
   console.log("API...");
   return res.json({
-    msg: "HELLO WORLD"
+    msg: "API ENDPOINT"
   });
 });
 app.use("/api/users", _verifyToken["default"], _user["default"]);

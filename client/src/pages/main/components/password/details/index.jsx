@@ -170,7 +170,7 @@ export default function PasswordDetails() {
 
       <div className="flex gap-x-4 items-center">
         <button
-          className="flex items-center bg=blue-200 text-white p-2"
+          className="flex items-center bg-primary text-white p-2"
           onClick={onDelete}
         >
           <TbTrashX />
@@ -178,7 +178,7 @@ export default function PasswordDetails() {
         </button>
         <Link
           to={`/password/edit/${login.uuid}`}
-          className="flex items-center bg=blue-200 text-white p-2"
+          className="flex items-center bg-primary text-white p-2"
         >
           <TbTrashX />
           <span className="text-xs">Edit</span>

@@ -29,37 +29,39 @@ var registerUser = exports.registerUser = /*#__PURE__*/function () {
           });
         case 4:
           existingUser = _context.sent;
-          console.log("USER", existingUser);
+          _context.next = 10;
+          break;
+        case 7:
+          _context.prev = 7;
+          _context.t0 = _context["catch"](1);
+          return _context.abrupt("return", res.status(401).json({
+            error: "Registration failed"
+          }));
+        case 10:
           if (!existingUser) {
-            _context.next = 8;
+            _context.next = 12;
             break;
           }
           return _context.abrupt("return", res.status(401).json({
-            error: "User already registered. Sign in instead"
+            error: "User is registered already, sign in instead."
           }));
-        case 8:
-          _context.next = 10;
+        case 12:
+          _context.next = 14;
           return _models.User.create({
             username: username,
             email: email,
             password: password
           });
-        case 10:
+        case 14:
           newUser = _context.sent;
           return _context.abrupt("return", res.status(201).json({
             msg: "Successfully created a new user"
           }));
-        case 14:
-          _context.prev = 14;
-          _context.t0 = _context["catch"](1);
-          return _context.abrupt("return", res.status(401).json({
-            error: "Registration failed"
-          }));
-        case 17:
+        case 16:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[1, 14]]);
+    }, _callee, null, [[1, 7]]);
   }));
   return function registerUser(_x, _x2, _x3) {
     return _ref.apply(this, arguments);
