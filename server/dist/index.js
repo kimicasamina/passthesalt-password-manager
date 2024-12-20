@@ -7,7 +7,6 @@ var _helmet = _interopRequireDefault(require("helmet"));
 var _bodyParser = _interopRequireDefault(require("body-parser"));
 var _cookieParser = _interopRequireDefault(require("cookie-parser"));
 var _cors = _interopRequireDefault(require("cors"));
-var _corsOption = _interopRequireDefault(require("./middleware/corsOption"));
 var _logEvents = require("./middleware/logEvents");
 var _connection = _interopRequireDefault(require("./db/config/connection"));
 var _user = _interopRequireDefault(require("./api/routes/user"));
@@ -33,22 +32,27 @@ app.use(_bodyParser["default"].urlencoded({
 app.use(_bodyParser["default"].json());
 app.use((0, _cookieParser["default"])());
 app.use((0, _helmet["default"])());
-app.use((0, _cors["default"])(_corsOption["default"]));
+app.use((0, _cors["default"])({
+  origin: process.env.CLIENT_URL,
+  // Your frontend URL
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  // Allow these HTTP methods
+  allowedHeaders: ["Content-Type"] // Allow specific headers
+}));
 
 // custom middleware logger
 app.use(_logEvents.logger);
-
-// endpoints
-app.get("/api", function (req, res) {
-  console.log("API...");
-  return res.json({
-    msg: "HELLO WORLD"
-  });
-});
 app.use("/api/users", _verifyToken["default"], _user["default"]);
 app.use("/api/logins", _verifyToken["default"], _login["default"]);
 app.use("/api/notes", _verifyToken["default"], _note["default"]);
 app.use("/api/auth", _auth["default"]);
+if (process.env.NODE_ENV === "production") {
+  // Serve static files from the React app
+  app.use(_express["default"]["static"](path.resolve(__dirname, "../client/dist")));
+  app.get("*", function (req, res) {
+    res.sendFile(path.resolve(__dirname, "../client/dist", "index.html"));
+  });
+}
 
 // global error handler
 app.use("*", function (err, req, res, next) {

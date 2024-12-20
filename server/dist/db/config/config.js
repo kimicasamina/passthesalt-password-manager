@@ -6,7 +6,7 @@ _dotenv["default"].config();
 module.exports = {
   development: {
     dialect: "mysql",
-    use_env_variable: process.env.DATABASE_URL,
+    use_env_variable: process.env.POSTGRES_URL,
     dialectOptions: {
       ssl: {
         require: true,
