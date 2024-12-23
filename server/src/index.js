@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import path from "path";
 import helmet from "helmet";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
@@ -13,6 +14,7 @@ import noteRouter from "./api/routes/note";
 import verifyToken from "./middleware/verifyToken";
 
 dotenv.config();
+
 const app = express();
 
 // middlewares
@@ -24,14 +26,37 @@ app.use(cookieParser());
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.CLIENT_URL, // Your frontend URL
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allow these HTTP methods
-    allowedHeaders: ["Content-Type"], // Allow specific headers
+    origin:
+      process.env.NODE_ENV === "production"
+        ? process.env.CLIENT_URL
+        : "http://localhost:5173/",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type"],
   })
 );
 
 // custom middleware logger
 app.use(logger);
+
+// Serve static files from the 'client/build' folder
+app.use(express.static(path.join(__dirname, "../../client/dist")));
+
+if (process.env.NODE_ENV === "production") {
+  const __dirname = path.resolve();
+  const rootDir = path.resolve(__dirname, "..");
+
+  app.get("*", (req, res) =>
+    res.sendFile(path.join(rootDir, "client", "dist", "index.html"))
+  );
+} else {
+  app.get("/", (req, res) => res.send("Server is ready..."));
+}
+
+// endpoints
+app.get("/api", (req, res) => {
+  console.log("API...");
+  return res.json({ msg: "API ENDPOINT" });
+});
 
 app.use("/api/users", verifyToken, userRouter);
 app.use("/api/logins", verifyToken, loginRouter);

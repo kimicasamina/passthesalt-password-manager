@@ -3,6 +3,7 @@
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 var _express = _interopRequireDefault(require("express"));
 var _dotenv = _interopRequireDefault(require("dotenv"));
+var _path = _interopRequireDefault(require("path"));
 var _helmet = _interopRequireDefault(require("helmet"));
 var _bodyParser = _interopRequireDefault(require("body-parser"));
 var _cookieParser = _interopRequireDefault(require("cookie-parser"));
@@ -42,6 +43,31 @@ app.use((0, _cors["default"])({
 
 // custom middleware logger
 app.use(_logEvents.logger);
+<<<<<<< HEAD
+=======
+
+// Serve static files from the 'client/build' folder
+app.use(_express["default"]["static"](_path["default"].join(__dirname, "../../client/dist")));
+if (process.env.NODE_ENV === "production") {
+  var _dirname = _path["default"].resolve();
+  var rootDir = _path["default"].resolve(_dirname, "..");
+  app.get("*", function (req, res) {
+    return res.sendFile(_path["default"].join(rootDir, "client", "dist", "index.html"));
+  });
+} else {
+  app.get("/", function (req, res) {
+    return res.send("Server is ready...");
+  });
+}
+
+// endpoints
+app.get("/api", function (req, res) {
+  console.log("API...");
+  return res.json({
+    msg: "API ENDPOINT"
+  });
+});
+>>>>>>> production
 app.use("/api/users", _verifyToken["default"], _user["default"]);
 app.use("/api/logins", _verifyToken["default"], _login["default"]);
 app.use("/api/notes", _verifyToken["default"], _note["default"]);
