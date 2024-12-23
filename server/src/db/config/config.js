@@ -4,11 +4,11 @@ dotenv.config();
 module.exports = {
   development: {
     dialect: "mysql",
-    use_env_variable: process.env.DATABASE_URL,
+    use_env_variable: "DATABASE_URL",
     dialectOptions: {
       ssl: {
-        require: true,
-        native: true,
+        require: false, // Disable SSL
+        rejectUnauthorized: false, // Do not reject self-signed certificates
       },
     },
   },
