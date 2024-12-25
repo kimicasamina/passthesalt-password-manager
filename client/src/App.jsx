@@ -1,14 +1,12 @@
+import { AuthProvider } from "./context/AuthContext";
 import { RouterProvider } from "react-router-dom";
-import { router } from "./routes/router";
+import router from "./router";
 
 function App() {
   return (
-    <RouterProvider
-      router={router}
-      future={{
-        v7_startTransition: true,
-      }}
-    />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   );
 }
 

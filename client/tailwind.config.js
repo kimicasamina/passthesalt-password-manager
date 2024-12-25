@@ -1,28 +1,24 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        primary: "#06141c",
-        accent: "#ffe529",
-        // base: "#fff",
+        primary: "#2C3E50",
+        secondary: "#3498DB",
+        background: "#F4F6F9",
+        textPrimary: "#2C3E50",
+        textSecondary: "#7F8C8D",
+        header: "#FFFFFF",
+        sidebar: "#34495E",
+        cardBackground: "#FFFFFF",
+        cardShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
       },
-      fontFamily: {
-        poppins: ["Poppins", "sans-serif"],
-        inter: ["Inter", "sans-serif"],
-        serif: ["Merriweather", "serif"],
-        reddit: ["Reddit Mono", "monospace"],
-        google: ["Google Sans Mono", "monospace"],
+      spacing: {
+        18: "4.5rem",
       },
-      animation: {
-        wiggle: "wiggle 1s ease-in-out infinite",
-      },
-      keyframes: {
-        wiggle: {
-          "0%, 100%": { transform: "rotate(-3deg)" },
-          "50%": { transform: "rotate(3deg)" },
-        },
+      boxShadow: {
+        subtle: "0 2px 6px rgba(0, 0, 0, 0.1)",
       },
     },
   },
