@@ -1,112 +1,94 @@
-import { User } from "../../db/models";
-import bcrypt from "bcrypt";
-import { compareHashPassword } from "../../utils/compareHashPassword";
-import jwt from "jsonwebtoken";
+import {
+  findUserByEmail,
+  createUser,
+  findUserByUuid,
+} from "../services/userService";
+import { validatePassword } from "../../utils/passwordUtils";
+import { generateJWT } from "../../utils/jwtUtils";
 
+// Register user
 export const registerUser = async (req, res, next) => {
   const { username, email, password } = req.body;
-  let existingUser;
 
   try {
-    existingUser = await User.findOne({ where: { email } });
+    const existingUser = await findUserByEmail(email);
+
+    if (existingUser) {
+      return res
+        .status(401)
+        .json({ error: "User is already registered, please sign in." });
+    }
+
+    const newUser = await createUser(username, email, password);
+    return res.status(201).json({ message: "Successfully created a new user" });
   } catch (error) {
-    return res.status(401).json({ error: "Registration failed" });
-  }
-
-  if (existingUser) {
     return res
-      .status(401)
-      .json({ error: "User is registered already, sign in instead." });
+      .status(500)
+      .json({ error: error.message || "Registration failed" });
   }
-
-  const newUser = await User.create({
-    username,
-    email,
-    password,
-  });
-
-  return res.status(201).json({ msg: "Successfully created a new user" });
 };
 
+// Login user
 export const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({
-      where: { email },
-      attributes: ["uuid", "password", "email", "username", "logins"],
-    });
-
-    console.log("USER: ", user);
+    const user = await findUserByEmail(email);
 
     if (!user) {
       return res.status(404).json({ error: "User not found." });
     }
 
-    const isValid = await user.validPassword(password);
+    const isValid = validatePassword(password, user.password);
     if (!isValid) {
       return res.status(404).json({ error: "Password is incorrect" });
     }
 
-    console.log("Valid: ", isValid);
+    const token = generateJWT(user.uuid, process.env.JWT_SECRET);
 
-    // Generate JWT token
-    const token = jwt.sign({ uuid: user.uuid }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-
-    // Send token as cookie
     res.cookie("access_token", token, {
-      httpOnly: true,
-      expiresIn: "1h",
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Strict",
+      httpOnly: true, // Prevents JS access
+      secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+      sameSite: "Strict", // Ensure cookie is sent only with same-site requests
+      maxAge: 3600000, // 1 hour
+      path: "/",
     });
+
+    const { password: _, ...userDetails } = user.get();
 
     res.status(200).json({
       message: "Login successful",
-      user: {
-        uuid: user.uuid,
-        email: user.email,
-        username: user.username,
-        logins: user.logins,
-      },
+      user: userDetails,
     });
   } catch (error) {
+    console.error("Login failed error:", error);
     res.status(500).json({ error: "Login failed" });
   }
 };
 
+// Logout user
 export const logoutUser = async (req, res, next) => {
-  let token = req.cookies.access_token;
-  console.log("DELETE TOKEN", token);
   try {
+    const token = req.cookies.access_token;
     if (token) {
-      res.clearCookie("access_token", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "None",
-        path: "/",
-      });
-      res.status(200).json({ msg: "Logged out successfully" });
+      console.log("Clearing cookie...");
+      res.clearCookie("access_token");
+      res.status(200).json({ message: "Logged out successfully" });
     } else {
-      res.status(400).json({ msg: "No token found" });
+      res.status(400).json({ message: "No token found" });
     }
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Logout failed" });
   }
 };
 
+// Get authenticated user info
 export const getAuth = async (req, res, next) => {
-  console.log("GET AUTH: ", req.user);
-  const { uuid } = req.user; // Destructure `uuid` directly from req.user
+  const { uuid } = req.user;
 
   try {
-    const user = await User.scope("withoutPassword").findOne({
-      where: { uuid },
-      include: ["logins"],
-    });
+    const user = await findUserByUuid(uuid);
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });

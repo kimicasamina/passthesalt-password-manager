@@ -31,11 +31,9 @@ const AuthService = {
 
   async logout() {
     try {
-      const response = await axios.delete(
-        `${API_URL}/api/auth/logout`,
-        {},
-        { withCredentials: true }
-      );
+      const response = await axios.delete(`${API_URL}/api/auth/logout`, {
+        withCredentials: true,
+      });
       return response.data;
     } catch (error) {
       handleAuthError(error);

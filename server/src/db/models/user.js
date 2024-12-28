@@ -21,11 +21,9 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     toJSON() {
-      return { ...this.get(), id: undefined };
-
       let user = { ...this.get(), id: undefined };
-      // delete user.password;
-      // return user;
+      delete user.password; // This ensures that the password is excluded from the response
+      return user;
     }
   }
   User.init(

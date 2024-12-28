@@ -28,7 +28,7 @@ export const getLoginByUuid = async (req, res, next) => {
 };
 
 export const createNewLogin = async (req, res, next) => {
-  const { userUuid, password } = req.body;
+  const { userUuid, password, name, username, email, website } = req.body;
   try {
     const user = await User.findOne({ where: { uuid: userUuid } });
 
@@ -38,12 +38,13 @@ export const createNewLogin = async (req, res, next) => {
 
     const encrypted = encrypt(password);
     const login = await Login.create({
-      name: req.body.name,
-      email: req.body.email,
+      username: username,
+      name: name,
+      email: email,
       password: encrypted.password,
       iv: encrypted.iv,
       user_id: user.id,
-      website: req.body.website,
+      website: website,
     });
 
     return res.json(login);
@@ -81,6 +82,7 @@ export const updateLogin = async (req, res, next) => {
 
     const encrypted = encrypt(req.body.password);
     login.name = req.body.name;
+    login.username = req.body.username;
     login.email = req.body.email;
     login.password = encrypted.password;
     login.iv = encrypted.iv;
