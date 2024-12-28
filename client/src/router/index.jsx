@@ -1,6 +1,6 @@
-// routes/router.js
 import { createBrowserRouter } from "react-router-dom";
-import CustomLayout from "../layouts/CustomLayouts";
+import GuessLayout from "../layouts/GuessLayout";
+import ProtectedLayout from "../layouts/ProtectedLayout";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Profile from "../pages/Profile";
@@ -10,34 +10,19 @@ import NotFound from "../pages/NotFound";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <CustomLayout isProtected={false} />, // Guest layout (unauthenticated users)
+    element: <GuessLayout />,
     children: [
       {
-        path: "/login",
-        element: <Login />,
+        path: "/",
+        element: <ProtectedLayout />,
+        children: [
+          { index: true, element: <Home /> },
+          { path: "/profile", element: <Profile /> },
+        ],
       },
-      {
-        path: "/register",
-        element: <Register />,
-      },
-      {
-        path: "*",
-        element: <NotFound />,
-      },
-    ],
-  },
-  {
-    path: "/",
-    element: <CustomLayout isProtected={true} />, // Protected layout (authenticated users)
-    children: [
-      {
-        index: true,
-        element: <Home />, // Home is protected
-      },
-      {
-        path: "/profile",
-        element: <Profile />, // Profile is protected
-      },
+      { path: "/login", element: <Login /> },
+      { path: "/register", element: <Register /> },
+      { path: "*", element: <NotFound /> },
     ],
   },
 ]);

@@ -29,9 +29,10 @@ app.use(
     origin:
       process.env.NODE_ENV === "production"
         ? process.env.CLIENT_URL
-        : "http://localhost:5173/",
+        : "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type"],
+    credentials: true, // Allow sending cookies
   })
 );
 

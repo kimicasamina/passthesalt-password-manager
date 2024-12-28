@@ -1,4 +1,5 @@
-const validateLogin = (values) => {
+// Validation Rules for Login
+export const validateLogin = (values) => {
   let errors = {};
 
   if (!values.email) {
@@ -14,7 +15,8 @@ const validateLogin = (values) => {
   return errors;
 };
 
-const validateRegister = (values) => {
+// Validation Rules for Registration
+export const validateRegister = (values) => {
   let errors = {};
 
   if (!values.username) {
@@ -41,5 +43,3 @@ const validateRegister = (values) => {
 
   return errors;
 };
-
-export { validateLogin, validateRegister };

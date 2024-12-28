@@ -1,18 +1,16 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
-import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { Outlet, Navigate } from "react-router-dom";
 
 export default function ProtectedLayout() {
-  const { user } = useAuth();
+  const { user, loading, error } = useAuth();
 
-  if (!user) return <Navigate to="/login" />;
+  if (loading) return <div>Loading...</div>; // Show loading state
+  if (!user && !loading) return <Navigate to="/login" />;
+
   return (
     <div className="w-full h-screen flex flex-col">
-      <Header />
-      <main className="w-full mt=auto">
-        <Outlet />
-      </main>
+      <Outlet />
     </div>
   );
 }

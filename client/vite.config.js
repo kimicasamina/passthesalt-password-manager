@@ -23,11 +23,16 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
+      // Replace `/api` with your endpoint
       "/api": {
-        target: viteMode === "production" ? apiUrl : "http://localhost:9000", // Use actual backend URL for production or localhost for dev
-        changeOrigin: true, // Ensures the host header is updated to the target's host
-        secure: false, // Set to true if using https for localhost or backend
-        rewrite: (path) => path.replace(/^\/api/, ""), // Removes /api prefix before forwarding
+        // target:
+        //   process.env.VITE_MODE === "production"
+        //     ? process.env.VITE_API_URL
+        //     : "http://localhost:6060",
+        target: process.env.VITE_API_URL,
+        changeOrigin: true,
+        secure: false, // Use this if you have an insecure API (HTTP instead of HTTPS)
+        rewrite: (path) => path.replace(/^\/api/, ""), // Optional: rewrite path if needed
       },
     },
   },

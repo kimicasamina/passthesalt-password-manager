@@ -1,61 +1,63 @@
-import axiosClient from "../utils/axiosClient";
-// Login service
-export const loginService = async (email, password) => {
-  const apiUrl = import.meta.env.VITE_API_URL;
-  try {
-    const response = await axios.post(`${apiUrl}/api/auth/login`, {
-      email,
-      password,
-    });
+import axios from "axios";
 
-    // Handle success response
-    if (response.status === 200) {
-      console.log("Login successful: ", response.data);
-      return response.data; // Returning the response data, such as a token or user data
-    } else {
-      throw new Error("Login failed");
+const API_URL = import.meta.env.VITE_API_URL;
+
+const AuthService = {
+  async register(username, email, password) {
+    try {
+      const response = await axios.post(`${API_URL}/api/auth/register`, {
+        username,
+        email,
+        password,
+      });
+      return response.data;
+    } catch (error) {
+      handleAuthError(error);
     }
-  } catch (error) {
-    // Handle error responses
-    console.error(
-      "Login error: ",
-      error.response ? error.response.data : error.message
-    );
-    throw error.response ? error.response.data : error.message; // Throw detailed error message
-  }
+  },
+
+  async login(email, password) {
+    try {
+      const response = await axios.post(
+        `${API_URL}/api/auth/login`,
+        { email, password },
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      handleAuthError(error);
+    }
+  },
+
+  async logout() {
+    try {
+      const response = await axios.delete(
+        `${API_URL}/api/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      handleAuthError(error);
+    }
+  },
+
+  async getAuth() {
+    try {
+      const response = await axios.get(`${API_URL}/api/auth/user`, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      handleAuthError(error);
+    }
+  },
 };
 
-export const registerService = async (username, email, password) => {
-  try {
-    console.log(`Sending POST request to: ${apiUrl}/api/auth/register`);
-    axiosClient.post("/api/auth/register", {
-      username,
-      email,
-      password,
-    });
-    // const response = await axios.post(
-    //   "/api/auth/register",
-    //   {
-    //     username,
-    //     email,
-    //     password,
-    //   }
-    //   // { withCredentials: true }
-    // );
-
-    // Handle success response
-    if (response.status === 201) {
-      console.log("Registration successful: ", response.data);
-      return response.data; // Returning user data or confirmation
-    } else {
-      throw new Error("Registration failed");
-    }
-  } catch (error) {
-    // Handle error responses
-    console.error(
-      "Registration error: ",
-      error.response ? error.response.data : error.message
-    );
-    throw error.response ? error.response.data : error.message; // Throw detailed error message
-  }
+const handleAuthError = (error) => {
+  const errorMessage = error.response ? error.response.data : error.message;
+  console.error(errorMessage);
+  throw new Error(errorMessage);
 };
+
+export default AuthService;

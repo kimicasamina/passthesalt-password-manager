@@ -37,7 +37,6 @@ const useForm = (initialValues, validate, onSubmit) => {
     }
   };
 
-  // Ensure errors are reset when the form is submitted
   useEffect(() => {
     if (isSubmitting) {
       setErrors({});

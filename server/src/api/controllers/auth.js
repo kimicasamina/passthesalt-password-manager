@@ -1,7 +1,7 @@
 import { User } from "../../db/models";
 import bcrypt from "bcrypt";
 import { compareHashPassword } from "../../utils/compareHashPassword";
-import { generateToken } from "../../utils/generateToken";
+import jwt from "jsonwebtoken";
 
 export const registerUser = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -32,13 +32,12 @@ export const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
-    let user = await User.findOne({
-      where: { email: email },
-      include: ["logins", "notes"],
-      attributes: { include: ["password"] },
+    const user = await User.findOne({
+      where: { email },
+      attributes: ["uuid", "password", "email", "username", "logins"],
     });
 
-    console.log("USER FOUND:", user.password);
+    console.log("USER: ", user);
 
     if (!user) {
       return res.status(404).json({ error: "User not found." });
@@ -49,22 +48,32 @@ export const loginUser = async (req, res, next) => {
       return res.status(404).json({ error: "Password is incorrect" });
     }
 
-    const token = generateToken(user.uuid);
+    console.log("Valid: ", isValid);
+
+    // Generate JWT token
+    const token = jwt.sign({ uuid: user.uuid }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    // Send token as cookie
     res.cookie("access_token", token, {
       httpOnly: true,
-      expiresIn: "30m",
+      expiresIn: "1h",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
     });
-    res.status(201).json({
-      msg: "User successfully logged in.",
+
+    res.status(200).json({
+      message: "Login successful",
       user: {
         uuid: user.uuid,
-        username: user.username,
         email: user.email,
+        username: user.username,
         logins: user.logins,
       },
     });
   } catch (error) {
-    res.status(401).json({ error: "fail to login" });
+    res.status(500).json({ error: "Login failed" });
   }
 };
 
@@ -72,26 +81,40 @@ export const logoutUser = async (req, res, next) => {
   let token = req.cookies.access_token;
   console.log("DELETE TOKEN", token);
   try {
-    res.clearCookie("access_token");
-    res.json({ msg: "You are logged out." });
+    if (token) {
+      res.clearCookie("access_token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "None",
+        path: "/",
+      });
+      res.status(200).json({ msg: "Logged out successfully" });
+    } else {
+      res.status(400).json({ msg: "No token found" });
+    }
   } catch (err) {
     console.log(err);
+    res.status(500).json({ error: "Logout failed" });
   }
 };
 
-export const getUserWithoutPassword = async (req, res, next) => {
-  let token = req.user;
-  console.log("REQ USER_ID", token);
+export const getAuth = async (req, res, next) => {
+  console.log("GET AUTH: ", req.user);
+  const { uuid } = req.user; // Destructure `uuid` directly from req.user
 
   try {
     const user = await User.scope("withoutPassword").findOne({
-      where: { uuid: token.uuid },
+      where: { uuid },
       include: ["logins"],
     });
-    return res.status(200).json({ user });
-  } catch (err) {
-    console.log(err);
 
-    return res.status(401).json({ msg: "User not found" });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json({ user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch user data" });
   }
 };

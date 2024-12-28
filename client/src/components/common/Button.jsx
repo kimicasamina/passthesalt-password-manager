@@ -12,7 +12,7 @@ const Button = ({ disabled, label, onClick, loading, type = "button" }) => {
   return (
     <button
       type={type}
-      onClick={onClick ? onClick : null}
+      onClick={onClick}
       disabled={disabled || loading}
       className={defaultStyles}
     >

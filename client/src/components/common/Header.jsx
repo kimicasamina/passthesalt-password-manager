@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
+import AuthService from "../../services/authService";
 import { Link } from "react-router-dom";
 
 export default function Header() {
@@ -9,10 +10,10 @@ export default function Header() {
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
   return (
-    <div className="w-full bg-primary">
-      <nav className="w-full max-w-[1440px] flex items-center px-8 py-2 justify-between gap-x-4">
+    <div className="w-full bg-primary text-white">
+      <nav className="w-full max-w-[1440px] flex items-center px-8 py-4 justify-between gap-x-4 shadow-subtle">
         <Link to="/">
-          <span className="w-auto">Passthesalt</span>
+          <span className="w-auto ">Passthesalt</span>
         </Link>
 
         <div className="flex-1">
@@ -64,12 +65,12 @@ export default function Header() {
         ) : (
           <div className="w-auto flex items-center justify-end gap-x-4 ">
             <Link to="/login">
-              <button className="bg-secondary text-primary px-2 py-1">
+              <button className="bg-secondary text-white hover:shadow-mild px-2 py-1">
                 Login
               </button>
             </Link>
             <Link to="/register">
-              <button className="bg-secondary text-primary px-2 py-1">
+              <button className="bg-secondary text-white hover:shadow-mild px-2 py-1">
                 Register
               </button>
             </Link>
