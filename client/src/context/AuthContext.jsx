@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import AuthService from "../services/authService";
+import LoadingPage from "../components/common/LoadingPage";
 
 const AuthContext = createContext();
 
@@ -42,7 +43,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ user, login, logout, loading, error }}>
-      {children}
+      {loading ? <LoadingPage /> : children}
     </AuthContext.Provider>
   );
 };

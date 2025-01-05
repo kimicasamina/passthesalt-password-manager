@@ -4,7 +4,7 @@ import ItemList from "../components/ItemList/ItemList";
 import ItemDetails from "../components/ItemDetails/ItemDetails";
 
 export default function Home() {
-  const [selectedMenu, setSelectedMenu] = useState(null);
+  const [selectedMenu, setSelectedMenu] = useState("all");
   const [selectedItem, setSelectedItem] = useState({});
 
   const handleSelectMenu = (menu) => {
@@ -12,15 +12,19 @@ export default function Home() {
     setSelectedItem(null); // Reset selected item when menu changes
   };
 
-  const handleSelectItem = (item) => setSelectedItem(item);
+  const handleSelectItem = (item) => {
+    setSelectedItem((prev) => (prev = item));
+  };
+
+  console.log("CURRENT SELECTED ITEM", selectedItem);
 
   return (
     <div className="flex w-full h-full">
-      <div className="w-1/4 bg-gray-800 text-white p-4">
+      <div className="w-[25%] bg-gray-800 text-white p-4">
         <SidebarMenu onSelect={handleSelectMenu} selectedMenu={selectedMenu} />
       </div>
 
-      <div className="p-4 flex-1 border-r-2 border-gray-500">
+      <div className="w-[25%] p-4 border-r-2 border-gray-500">
         <ItemList
           onSelect={handleSelectItem}
           selectedItem={selectedItem}

@@ -1,60 +1,67 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiEye, FiEyeOff, FiClipboard } from "react-icons/fi";
 import PasswordService from "../services/passwordService";
 
-export default function PasswordDetails({ passwordData }) {
-  console.log("PASSWORD DATA: ", passwordData);
-  const [showPassword, setShowPassword] = useState(false);
+const PasswordDetails = ({ passwordData, showPassword, setShowPassword }) => {
   const [decryptedPassword, setDecryptedPassword] = useState(null);
 
-  const togglePasswordVisibility = async () => {
-    setShowPassword(!showPassword);
-    decryptPassword(passwordData.iv, passwordData.password);
-    // setTimeout(() => {
-    // }, 3000);
-    // hidePassword();
-  };
-
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text).then(() => {
-      alert("Password copied to clipboard!");
-    });
-  };
-
-  const decryptPassword = async (iv, password) => {
-    console.log(`PASSWORD TO POST TO THE SERVER, ${iv} ${password}`);
-    const data = await PasswordService.decryptPassword(
-      passwordData.iv,
-      passwordData.password
-    );
-    console.log("PASSWORD: ", data);
-    setDecryptedPassword(data);
-  };
-
-  const hidePassword = () => {
+  useEffect(() => {
+    // Reset decrypted password when passwordData changes
     setDecryptedPassword(null);
-    setShowPassword(false);
+    setShowPassword(false); // Reset password visibility
+
+    if (passwordData?.iv && passwordData?.password) {
+      console.log("DECRYPTING PASSWORD...");
+      decryptPassword(passwordData.iv, passwordData.password);
+    }
+  }, [passwordData, setShowPassword]); // Reset on passwordData change
+
+  // Decrypt the password using PasswordService
+  const decryptPassword = async (iv, password) => {
+    try {
+      const { password: decrypted } = await PasswordService.decryptPassword(
+        iv,
+        password
+      );
+      setDecryptedPassword(decrypted);
+    } catch (error) {
+      console.error("Decryption failed:", error);
+    }
+  };
+
+  // Toggle password visibility with auto-hide after 3 seconds
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+    setTimeout(() => setShowPassword(false), 3000); // Auto-hide after 3 seconds
+  };
+
+  // Copy decrypted password to clipboard
+  const copyToClipboard = async () => {
+    if (decryptedPassword) {
+      await navigator.clipboard.writeText(decryptedPassword);
+      alert("Password copied to clipboard!");
+    } else {
+      alert("Password is not yet decrypted.");
+    }
   };
 
   return (
     <div className="flex items-center space-x-2">
       <p className="flex-1">{showPassword ? decryptedPassword : "••••••••"}</p>
-
-      {/* Toggle Button */}
       <button
         onClick={togglePasswordVisibility}
         className="p-2 text-gray-600 hover:text-gray-800 focus:outline-none"
       >
         {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
       </button>
-
-      {/* Copy Button */}
       <button
-        onClick={() => copyToClipboard(decryptedPassword)}
+        onClick={copyToClipboard}
         className="p-2 text-gray-600 hover:text-gray-800 focus:outline-none"
       >
         <FiClipboard size={20} />
       </button>
     </div>
   );
-}
+};
+
+export default PasswordDetails;

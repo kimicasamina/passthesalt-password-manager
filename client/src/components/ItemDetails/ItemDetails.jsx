@@ -1,38 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PasswordDetails from "../PasswordDetails";
-import { FiEye, FiEyeOff, FiClipboard } from "react-icons/fi";
+import FormattedDate from "../common/FormattedDate";
 
 const ItemDetails = ({ selectedItem }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordData, setPasswordData] = useState({ iv: "", password: "" });
 
-  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  useEffect(() => {
+    if (selectedItem) {
+      setPasswordData({
+        iv: selectedItem.iv,
+        password: selectedItem.password,
+      });
+    }
+  }, [selectedItem]); // Update passwordData when selectedItem changes
 
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text).then(() => {
-      alert("Password copied to clipboard!");
-    });
-  };
-
-  if (!selectedItem) {
-    return <p>No selected item</p>;
+  // Display an indication if no item is selected
+  if (!selectedItem || Object.keys(selectedItem).length === 0) {
+    return <p>No item selected. Please select an item from the list.</p>;
   }
 
-  console.log(`DETAILS: ${selectedItem.iv} ${selectedItem.password}`);
-
   return (
-    <div className="h-full max-w-lg mx-auto bg-white space-y-6">
+    <div className="h-full w-full bg-white space-y-6">
       <h2 className="text-2xl font-bold text-gray-800">{selectedItem.name}</h2>
       <div className="space-y-2">
-        <p className="">{selectedItem.username}</p>
-        <p className="">{selectedItem.email}</p>
+        <p>{selectedItem.username}</p>
+        <p>{selectedItem.email}</p>
       </div>
       <PasswordDetails
-        passwordData={{ iv: selectedItem.iv, password: selectedItem.password }}
+        showPassword={showPassword}
+        setShowPassword={setShowPassword}
+        passwordData={passwordData}
       />
-
-      <div className="space-y-2">
-        <p>{selectedItem?.createdAt?.toString()}</p>
-        <p>{selectedItem?.updatedAt?.toString()}</p>
+      <div className="flex flex-col space-y-2">
+        <div className="w-full flex flex-col space-y-2">
+          Created At:
+          <FormattedDate date={selectedItem?.createdAt} />
+        </div>
+        <div className="w-full flex flex-col space-y-2">
+          Updated At:
+          <FormattedDate date={selectedItem?.updatedAt} />
+        </div>
       </div>
     </div>
   );

@@ -5,8 +5,9 @@ import { Outlet, Navigate } from "react-router-dom";
 export default function ProtectedLayout() {
   const { user, loading, error } = useAuth();
 
-  if (loading) return <div>Loading...</div>; // Show loading state
-  if (!user && !loading) return <Navigate to="/login" />;
+  if (loading) return <LoadingPage />; // Show loading state
+  if (error) return <div>{error}</div>; // Show error state
+  if (!user) return <Navigate to="/login" />; // Redirect to login if not authenticated
 
   return (
     <div className="h-full w-full flex flex-col">

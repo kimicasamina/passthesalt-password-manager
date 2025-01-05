@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useFormValidation } from "../hooks/useFormValidation";
 import { validateLogin } from "../utils/validationRules";
 import useForm from "../hooks/useForm";
 import Button from "../components/common/Button";
@@ -9,18 +8,21 @@ import InputField from "../components/common/InputField";
 import AuthService from "../services/authService";
 
 const Login = () => {
-  const navigate = useNavigate();
   const { user, login } = useAuth();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const onSubmit = async (values) => {
     setLoading(true);
+    setError(null); // Reset previous errors
     try {
       const data = await AuthService.login(values.email, values.password);
       login(data.user);
       navigate("/"); // Redirect to homepage after login success
     } catch (error) {
       console.error("Login failed:", error);
+      setError(error);
     } finally {
       setLoading(false);
     }
@@ -70,6 +72,12 @@ const Login = () => {
           onBlur={handleBlur}
           error={errors.password}
         />
+
+        {/* Display login error message if any */}
+        {!isSubmitting && error && (
+          <div className="text-red-500 text-sm mt-2">{error}</div>
+        )}
+
         <Button
           label={loading ? "Logging in..." : "Login"}
           loading={loading}
