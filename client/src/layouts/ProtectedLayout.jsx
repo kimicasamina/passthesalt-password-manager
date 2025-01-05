@@ -9,7 +9,7 @@ export default function ProtectedLayout() {
   if (!user && !loading) return <Navigate to="/login" />;
 
   return (
-    <div className="w-full h-screen flex flex-col">
+    <div className="h-full w-full flex flex-col">
       <Outlet />
     </div>
   );

@@ -31,29 +31,34 @@ import { useAuth } from "../../context/AuthContext";
 //   },
 // ];
 
-export default function ItemList({ selectedMenu, onSelect }) {
+export default function ItemList({ selectedMenu, onSelect, selectedItem }) {
   const { user } = useAuth();
 
   return (
     <>
       {selectedMenu ? (
-        selectedMenu == "all" && (
-          <ul className="w-full flex flex-col">
-            {user.logins ? (
-              user.logins.map((item) => (
-                <div className="w-full flex" key={item.id}>
+        selectedMenu === "all" && (
+          <ul className="w-full h-full flex flex-col">
+            {user.logins && user.logins.length > 0 ? (
+              user.logins.map((item, index) => (
+                <li className="w-full flex" key={index}>
                   <span
-                    className="w-full mb-2 hover:text-accent cursor-pointer"
+                    className={`w-full mb-2 hover:text-accent cursor-pointer ${
+                      selectedItem && selectedItem.id === item.id
+                        ? "text-accent"
+                        : "text-blue-500"
+                    }`}
                     onClick={() => onSelect(item)}
                   >
                     {item.name}
                   </span>
-                  {/* <span className="">{item.username}</span>
-                  <span className="">{item.createAt}</span> */}
-                </div>
+                  {/* Optionally display the username and creation date */}
+                  {/* <span>{item.username}</span>
+                <span>{new Date(item.createAt).toLocaleString()}</span> */}
+                </li>
               ))
             ) : (
-              <span className="w-full">Password is empty</span>
+              <span className="w-full">No logins available</span>
             )}
           </ul>
         )

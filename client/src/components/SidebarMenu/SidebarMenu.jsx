@@ -22,7 +22,7 @@ const SidebarMenu = ({ onSelect, selectedMenu }) => {
 
   return (
     <div className="w-full">
-      <ul className="w-full flex flex-col gap-y-1 mb-8">
+      <ul className="w-full flex flex-col gap-y-1 mb-10">
         {menuList.map((item) => (
           <MenuItem
             key={item.id}
@@ -50,8 +50,8 @@ const SidebarMenu = ({ onSelect, selectedMenu }) => {
 const MenuItem = ({ item, selectedMenu, onSelect }) => (
   <div className="w-full" onClick={() => onSelect(item.id)}>
     <span
-      className={`text-sm text-text hover:text-accent cursor-pointer ${
-        selectedMenu === item.id ? "text-accent" : ""
+      className={`text-sm hover:text-accent cursor-pointer ${
+        selectedMenu == item.id ? "text-accent" : "text-text"
       }`}
     >
       {item.label}

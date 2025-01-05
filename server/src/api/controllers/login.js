@@ -60,6 +60,7 @@ export const getPassword = async (req, res, next) => {
       iv: req.body.iv,
       password: req.body.password,
     });
+    console.log("PASSWORD DETAILS: ", req.body);
     return res.status(200).json({ password });
     // return res.send(decrypt(req.body))
   } catch (error) {
