@@ -5,7 +5,7 @@ import ItemDetails from "../components/ItemDetails/ItemDetails";
 
 export default function Home() {
   const [selectedMenu, setSelectedMenu] = useState("all");
-  const [selectedItem, setSelectedItem] = useState({});
+  const [selectedItem, setSelectedItem] = useState(null); // Set to null for better state control
 
   const handleSelectMenu = (menu) => {
     setSelectedMenu(menu);
@@ -13,28 +13,18 @@ export default function Home() {
   };
 
   const handleSelectItem = (item) => {
-    setSelectedItem((prev) => (prev = item));
+    setSelectedItem(item); // Set selected item
   };
-
-  console.log("CURRENT SELECTED ITEM", selectedItem);
 
   return (
     <div className="flex w-full h-full">
-      <div className="w-[25%] bg-gray-800 text-white p-4">
-        <SidebarMenu onSelect={handleSelectMenu} selectedMenu={selectedMenu} />
-      </div>
-
-      <div className="w-[25%] p-4 border-r-2 border-gray-500">
-        <ItemList
-          onSelect={handleSelectItem}
-          selectedItem={selectedItem}
-          selectedMenu={selectedMenu}
-        />
-      </div>
-
-      <div className="p-4 flex-1">
-        <ItemDetails selectedItem={selectedItem} />
-      </div>
+      <SidebarMenu selectedMenu={selectedMenu} onSelect={handleSelectMenu} />
+      <ItemList
+        selectedMenu={selectedMenu}
+        selectedItem={selectedItem}
+        onSelect={handleSelectItem}
+      />
+      <ItemDetails selectedItem={selectedItem} />
     </div>
   );
 }

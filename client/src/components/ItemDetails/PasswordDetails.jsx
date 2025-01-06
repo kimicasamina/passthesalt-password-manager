@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FiEye, FiEyeOff, FiClipboard } from "react-icons/fi";
-import PasswordService from "../services/passwordService";
+import PasswordService from "../../services/passwordService";
 
 const PasswordDetails = ({ passwordData, showPassword, setShowPassword }) => {
   const [decryptedPassword, setDecryptedPassword] = useState(null);

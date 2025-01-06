@@ -6,7 +6,6 @@ const algorithm = "aes-256-cbc";
 
 // Encryption function
 export const encrypt = (password) => {
-  console.log("SECURE KEY", key);
   console.log("Encryption...");
   const iv = crypto.randomBytes(16); // Generate a random IV
   let cipher = crypto.createCipheriv(algorithm, key, iv);

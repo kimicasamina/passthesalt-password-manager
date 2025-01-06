@@ -4,25 +4,25 @@ import { Link } from "react-router-dom";
 const SidebarMenu = ({ onSelect, selectedMenu }) => {
   const menuList = useMemo(
     () => [
-      { id: "all", label: "All Items", path: "/" },
-      { id: "favorites", label: "Favorites", path: "/favorites" },
-      { id: "passwords", label: "Passwords", path: "/passwords" },
-      { id: "notes", label: "Notes", path: "/notes" },
+      { id: "all", label: "All Items" },
+      { id: "favorites", label: "Favorites" },
+      { id: "passwords", label: "Passwords" },
+      { id: "notes", label: "Notes" },
     ],
     []
   );
 
   const categories = useMemo(
     () => [
-      { id: "banking", label: "Banking", path: "banking" },
-      { id: "socialmedia", label: "Social Media", path: "social media" },
+      { id: "banking", label: "Banking" },
+      { id: "socialmedia", label: "Social Media" },
     ],
     []
   );
 
   return (
     <div className="w-full">
-      <ul className="w-full flex flex-col gap-y-1 mb-10">
+      <ul className="flex flex-col gap-y-1 mb-10">
         {menuList.map((item) => (
           <MenuItem
             key={item.id}
@@ -32,8 +32,9 @@ const SidebarMenu = ({ onSelect, selectedMenu }) => {
           />
         ))}
       </ul>
+
       <h2 className="text-xs font-semibold text-accent mb-2">Folders</h2>
-      <ul className="w-full flex flex-col gap-y-1">
+      <ul className="flex flex-col gap-y-1">
         {categories.map((item) => (
           <MenuItem
             key={item.id}
@@ -48,10 +49,10 @@ const SidebarMenu = ({ onSelect, selectedMenu }) => {
 };
 
 const MenuItem = ({ item, selectedMenu, onSelect }) => (
-  <div className="w-full" onClick={() => onSelect(item.id)}>
+  <div onClick={() => onSelect(item.id)} className="cursor-pointer">
     <span
-      className={`text-sm hover:text-accent cursor-pointer ${
-        selectedMenu == item.id ? "text-accent" : "text-text"
+      className={`text-sm hover:text-accent ${
+        selectedMenu === item.id ? "text-accent" : "text-text"
       }`}
     >
       {item.label}

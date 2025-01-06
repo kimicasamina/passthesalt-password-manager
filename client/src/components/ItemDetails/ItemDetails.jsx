@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PasswordDetails from "../PasswordDetails";
+import PasswordDetails from "./PasswordDetails";
 import FormattedDate from "../common/FormattedDate";
 
 const ItemDetails = ({ selectedItem }) => {
@@ -13,9 +13,8 @@ const ItemDetails = ({ selectedItem }) => {
         password: selectedItem.password,
       });
     }
-  }, [selectedItem]); // Update passwordData when selectedItem changes
+  }, [selectedItem]);
 
-  // Display an indication if no item is selected
   if (!selectedItem || Object.keys(selectedItem).length === 0) {
     return <p>No item selected. Please select an item from the list.</p>;
   }
@@ -33,13 +32,11 @@ const ItemDetails = ({ selectedItem }) => {
         passwordData={passwordData}
       />
       <div className="flex flex-col space-y-2">
-        <div className="w-full flex flex-col space-y-2">
-          Created At:
-          <FormattedDate date={selectedItem?.createdAt} />
+        <div>
+          Created At: <FormattedDate date={selectedItem.createdAt} />
         </div>
-        <div className="w-full flex flex-col space-y-2">
-          Updated At:
-          <FormattedDate date={selectedItem?.updatedAt} />
+        <div>
+          Updated At: <FormattedDate date={selectedItem.updatedAt} />
         </div>
       </div>
     </div>
