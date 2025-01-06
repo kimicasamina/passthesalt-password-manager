@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { validateLogin } from "../utils/validationRules";
+import ValidationRules from "../utils/validationRules";
 import useForm from "../hooks/useForm";
 import Button from "../components/common/Button";
 import InputField from "../components/common/InputField";
@@ -40,7 +40,7 @@ const Login = () => {
       email: "",
       password: "",
     },
-    validateLogin,
+    ValidationRules.validateLogin,
     onSubmit
   );
 

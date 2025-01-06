@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import useForm from "../hooks/useForm";
 import InputField from "../components/common/InputField";
 import Button from "../components/common/Button";
-import { validateRegister } from "../utils/validationRules";
+import ValidationRules from "../utils/validationRules";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../services/authService";
 
@@ -45,7 +45,7 @@ const Register = () => {
     isSubmitting,
   } = useForm(
     { username: "", email: "", password: "", confirmPassword: "" },
-    validateRegister,
+    ValidationRules.validateRegister,
     onSubmit
   );
 

@@ -17,8 +17,8 @@ export default function Header() {
         <div className="w-full max-w-[500px]">
           <input
             type="text"
-            className="w-full py-1 px-2 text-sm"
-            placeholder="Search password..."
+            className="w-full py-2 px-2 text-sm rounded-md focus:outline-none text-black"
+            placeholder="Search..."
           />
         </div>
         {user ? (

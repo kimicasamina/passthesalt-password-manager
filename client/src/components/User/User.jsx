@@ -35,7 +35,7 @@ export default function User({ user, logout }) {
       {isDropdownOpen && (
         <div
           ref={dropdownRef}
-          className="absolute bg-gray-800 text-white rounded-md shadow-md mt-2 w-48"
+          className="absolute bg-gray-800 text-white rounded-md shadow-md mt-2 right-0 w-48"
         >
           <Link
             to="/profile"

@@ -1,12 +1,15 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
-import { FaKey } from "react-icons/fa";
-import { FaPlusCircle } from "react-icons/fa";
-import { FaRegStickyNote } from "react-icons/fa";
-import { FaFolder } from "react-icons/fa";
+import { FaKey, FaPlusCircle, FaRegStickyNote, FaFolder } from "react-icons/fa";
+import userModalDialog from "../../hooks/userModalDialog";
+import ModalDialog from "../common/ModalDialog";
+import Form from "../common/Form";
 
 export default function NewItem() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedMenu, setSelectedMenu] = useState(null);
+  const { isOpen, open, close } = userModalDialog();
 
+  // Menu list definition
   const menuList = useMemo(
     () => [
       {
@@ -30,7 +33,13 @@ export default function NewItem() {
 
   const dropdownRef = useRef(null);
 
-  // Close the dropdown if clicked outside of it
+  const handleSubmit = (values) => {
+    // Handle form submission based on selectedMenu
+    console.log("Form Submitted:", values);
+    close(); // Close modal after submission
+  };
+
+  // Close dropdown when clicking outside of it
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -45,31 +54,54 @@ export default function NewItem() {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const toggleModal = (id) => {
+    setSelectedMenu(id);
+    toggleDropdown();
+    open();
+  };
+
   return (
-    <div className="relative inline-block">
-      <button
-        className="bg-accent text-white p-2 rounded-md hover:bg-accent-dark focus:outline-none flex items-center gap-x-2"
-        onClick={toggleDropdown}
-      >
-        <FaPlusCircle className="w-6 h-6" />
-        <span className="">Add New</span>
-      </button>
-      {isDropdownOpen && (
-        <div
-          ref={dropdownRef}
-          className="absolute bg-gray-800 text-white rounded-md shadow-md mt-2 w-48"
+    <>
+      <div className="relative inline-block">
+        <button
+          className="bg-accent text-white p-2 rounded-md hover:bg-accent-dark focus:outline-none flex items-center gap-x-2"
+          onClick={toggleDropdown}
         >
-          {menuList.map((menu) => (
-            <button
-              key={menu.id}
-              className="w-full text-left px-4 py-2 hover:bg-gray-700 focus:outline-none flex gap-x-2 items-center rounded-md"
-            >
-              <span className="">{menu.icon}</span>
-              <span className="">{menu.label}</span>
-            </button>
-          ))}
-        </div>
+          <FaPlusCircle className="w-6 h-6" />
+          <span className="">Add New</span>
+        </button>
+
+        {/* Dropdown Menu */}
+        {isDropdownOpen && (
+          <div
+            ref={dropdownRef}
+            className="absolute bg-gray-800 text-white rounded-md shadow-md mt-2 w-48"
+          >
+            {menuList.map((menu) => (
+              <button
+                key={menu.id}
+                className="w-full text-left px-4 py-2 hover:bg-gray-700 focus:outline-none flex gap-x-2 items-center rounded-md"
+                onClick={() => toggleModal(menu.id)}
+              >
+                <span>{menu.icon}</span>
+                <span>{menu.label}</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+      {isOpen && (
+        <ModalDialog onClose={close}>
+          <h1 className="text-lg font-semibold mb-4">
+            {selectedMenu === "password"
+              ? "Add New Password"
+              : selectedMenu === "secret_note"
+              ? "Add New Secret Note"
+              : "Add New Folder"}
+          </h1>
+          <Form selectedMenu={selectedMenu} onSubmit={handleSubmit} />
+        </ModalDialog>
       )}
-    </div>
+    </>
   );
 }

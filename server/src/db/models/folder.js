@@ -1,22 +1,24 @@
 "use strict";
 const { Model } = require("sequelize");
+const { encrypt } = require("../../middleware/encryptionHandler");
 module.exports = (sequelize, DataTypes) => {
-  class Note extends Model {
+  class Folder extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ User, Folder }) {
+    static associate({ User, Login, Note }) {
       // define association here
       this.belongsTo(User, { foreignKey: "user_id", as: "user" });
-      this.belongsTo(Folder, { foreignKey: "folder_id", as: "folder" });
+      this.hasMany(Login, { foreignKey: "user_id", as: "logins" });
+      this.hasMany(Note, { foreignKey: "user_id", as: "notes" });
     }
-    toJSON() {
-      return { ...this.get(), id: undefined, user_id: undefined };
-    }
+    // toJSON() {
+    //   return { ...this.get(), id: undefined, user_id: undefined };
+    // }
   }
-  Note.init(
+  Folder.init(
     {
       uuid: {
         type: DataTypes.UUID,
@@ -25,28 +27,21 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: {
-          msg: "Name is already taken",
-        },
         validate: {
-          notNull: { msg: "A name is required" },
+          notNull: { msg: "Name is required" },
           notEmpty: { msg: "Please provide a name" },
         },
       },
-      content: {
+      description: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          notNull: { msg: "A content is required" },
-          notEmpty: { msg: "Please provide a content" },
-        },
       },
     },
     {
       sequelize,
-      tableName: "notes",
-      modelName: "Note",
+      tableName: "folders",
+      modelName: "Folder",
     }
   );
-  return Note;
+  return Folder;
 };
