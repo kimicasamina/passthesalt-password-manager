@@ -5,13 +5,14 @@ import helmet from "helmet";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { logger } from "./middleware/logEvents";
-import connection from "./db/config/connection";
-import userRouter from "./api/routes/user";
-import authRouter from "./api/routes/auth";
-import loginRouter from "./api/routes/login";
-import noteRouter from "./api/routes/note";
-import verifyToken from "./middleware/verifyToken";
+import { logger } from "./v1/middleware/logEvents";
+import connection from "./v1/db/config/connection";
+import userRouter from "./v1/api/routes/user";
+import authRouter from "./v1/api/routes/auth";
+import loginRouter from "./v1/api/routes/login";
+import folderRouter from "./v1/api/routes/folder";
+import noteRouter from "./v1/api/routes/note";
+import verifyToken from "./v1/middleware/verifyToken";
 
 dotenv.config();
 
@@ -62,6 +63,7 @@ app.get("/api", (req, res) => {
 app.use("/api/users", verifyToken, userRouter);
 app.use("/api/logins", verifyToken, loginRouter);
 app.use("/api/notes", verifyToken, noteRouter);
+app.use("/api/folders", verifyToken, folderRouter);
 app.use("/api/auth", authRouter);
 
 if (process.env.NODE_ENV === "production") {

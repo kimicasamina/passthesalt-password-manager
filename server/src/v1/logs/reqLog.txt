@@ -903,3 +903,15 @@ Mon 06	07:41:22 PM	68624f84-c7f9-4dcc-9207-4e1964538309	GET	http://localhost:517
 Mon 06	07:41:26 PM	2ebd7d7f-e098-4515-9847-ab1692d0c64b	GET	http://localhost:5173	/api/auth/user}
 Mon 06	07:49:42 PM	4aea9f0b-d122-4e97-ac57-c61f63ca233d	GET	http://localhost:5173	/api/auth/user}
 Mon 06	07:49:42 PM	17a2a334-c4a5-44f5-831f-bc0bdbae1a25	GET	http://localhost:5173	/api/auth/user}
+Mon 06	10:54:30 PM	f5dea804-0b2e-432d-bf16-d364bf3cdf33	POST	undefined	/api/auth/register}
+Mon 06	10:54:41 PM	ad6382ee-5fa2-405a-89a2-ef8acf7e2d89	POST	undefined	/api/auth/login}
+Mon 06	10:55:55 PM	20a0f6b6-75c5-4790-8712-39132726f183	POST	undefined	/api/folders/}
+Mon 06	10:57:08 PM	35adf586-3597-4670-9e44-f08b76e6f502	POST	undefined	/api/folders/}
+Mon 06	11:03:17 PM	e0e7ee52-fd13-44f2-9649-811c5db0f747	POST	undefined	/api/logins/}
+Mon 06	11:03:38 PM	e63ac73f-285f-4390-99e0-19c2833f67ed	POST	undefined	/api/logins/}
+Mon 06	11:04:07 PM	874385f9-ddd8-41d7-b40a-cf2f2804c4ad	POST	undefined	/api/auth/login}
+Mon 06	11:07:35 PM	6c082d5f-4dfe-4ae2-b3d0-7823240dcbcc	POST	undefined	/api/logins/}
+Mon 06	11:07:44 PM	edbeb1e7-2f88-4837-8d16-8d4f75874a4b	POST	undefined	/api/auth/login}
+Mon 06	11:08:08 PM	89cc2b85-e5a7-437d-9a36-1953744a5b02	POST	undefined	/api/auth/register}
+Mon 06	11:08:20 PM	9f3e1ee9-bf9d-4dc2-9dc9-5b2e6e822324	POST	undefined	/api/auth/login}
+Mon 06	11:08:37 PM	00dee619-4246-401d-8ca3-3cedfd3b65a4	POST	undefined	/api/logins/}

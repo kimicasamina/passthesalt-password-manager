@@ -14,9 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(Login, { foreignKey: "user_id", as: "logins" });
       this.hasMany(Note, { foreignKey: "user_id", as: "notes" });
     }
-    // toJSON() {
-    //   return { ...this.get(), id: undefined, user_id: undefined };
-    // }
+    toJSON() {
+      return { ...this.get(), id: undefined, user_id: undefined };
+    }
   }
   Folder.init(
     {

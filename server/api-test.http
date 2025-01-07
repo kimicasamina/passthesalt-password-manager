@@ -14,7 +14,7 @@ POST {{baseUrl}}/api/logins/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "userUuid": "60969fa0-0fd9-4c19-ba43-4e02ad1e2e48",
+    "userUuid": "13af6aa8-055b-4038-b969-6f708a5295d2",
     "password":"123456789",
     "name": "Habitica",
     "username": "saucebot",
