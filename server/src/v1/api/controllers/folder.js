@@ -1,13 +1,13 @@
-import { User, Folder } from "../../db/models";
+import { User, Folder } from '../../db/models';
 export const getAllFolders = async (req, res, next) => {
   try {
     const folders = await Folder.findAll({
-      include: ["notes", "logins", "user"],
+      include: ['notes', 'logins', 'user'],
     });
     return res.json(folders);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ error: "Something went wrong" });
+    return res.status(500).json({ error: 'Something went wrong' });
   }
 };
 
@@ -16,7 +16,7 @@ export const getFolderByUuid = async (req, res, next) => {
   try {
     const folder = await Folder.findOne({
       where: { uuid },
-      include: ["notes", "logins", "user"],
+      include: ['notes', 'logins', 'user'],
     });
     return res.json(folder);
   } catch (error) {
@@ -30,7 +30,7 @@ export const updateFolder = async (req, res, next) => {
   try {
     const folder = await Folder.findOne({
       where: { uuid },
-      include: ["notes", "logins", "user"],
+      include: ['notes', 'logins', 'user'],
     });
     folder.name = req.body.name;
     folder.description = req.body.description;
@@ -48,7 +48,7 @@ export const deleteFolder = async (req, res, next) => {
   try {
     const folder = await Folder.findOne({ where: { uuid } });
     await folder.destroy();
-    return res.json({ msg: "Successfully delete a folder" });
+    return res.json({ msg: 'Successfully delete a folder' });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: error.message });

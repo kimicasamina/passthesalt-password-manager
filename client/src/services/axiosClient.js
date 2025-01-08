@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 // You can add interceptors for logging or authentication headers
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("access_token");
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }

@@ -1,11 +1,12 @@
-@baseUrl = http://localhost:6060
+@baseUrl = http://localhost:8333
 
 ### Login Request
-POST {{baseUrl}}/api/auth/login HTTP/1.1
+POST {{baseUrl}}/api/v2/auths/register HTTP/1.1
 Content-Type: application/json
 
 {
   "email": "saucebot@gmail.com",
+  "username": "saucebot",
   "password": "123456789"
 }
 
@@ -45,3 +46,42 @@ Content-Type: application/json
     "iv": "2045c6cad6b962f2344de1ea1e15f826",
     "password": "619e729fe5e1abed7a4af25dc4c9d14a"
 }
+
+
+### TEST FOR API v2 
+
+### Login Request
+POST {{baseUrl}}/api/v2/auths/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "saucebot@gmail.com",
+  "password": "123456789"
+}
+
+### Register Request
+POST {{baseUrl}}/api/v2/auths/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "username": "saucebot",
+  "password": "123456789"
+}
+
+### LOGOUT Request
+DELETE {{baseUrl}}/api/v2/auths/logout HTTP/1.1
+Content-Type: application/json
+
+{
+}
+
+### USER
+### GET USER REQUEST
+GET {{baseUrl}}/api/v2/users/ HTTP/1.1
+Content-Type: application/json
+{
+  "email": "saucebot@gmail.com",
+  "username": "saucebot",
+  "password": "123456789"
+}
+
