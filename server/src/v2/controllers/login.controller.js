@@ -59,14 +59,14 @@ export const createLogin = asyncHandler(async (req, res) => {
       website,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
-      message: 'Note created successfully',
+      message: 'New Login created successfully',
       login,
     });
   } catch (error) {
     console.error('Error creating note:', error);
-    res.status(500).json({ message: 'Error creating note' });
+    return res.status(500).json({ message: 'Error creating note' });
   }
 });
 
@@ -82,7 +82,7 @@ export const deleteLogin = asyncHandler(async (req, res) => {
 
   await login.destroy();
 
-  res.status(204).json({
+  return res.status(200).json({
     success: true,
     message: 'Login deleted successfully.',
   });
@@ -101,7 +101,7 @@ export const updateLogin = asyncHandler(async (req, res) => {
   // Update login with new data
   await login.update(req.body);
 
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     message: 'Login updated successfully.',
     login,
@@ -114,14 +114,14 @@ export const getLoginById = asyncHandler(async (req, res) => {
 
   const login = await Login.findOne({
     where: { id: login_id },
-    include: ['user', 'folder'], // Including associated User and Folder
+    // include: ['user', 'folder'], // Including associated User and Folder
   });
 
   if (!login) {
     return res.status(404).json({ error: 'Login not found' });
   }
 
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     message: 'Login retrieved successfully.',
     login,

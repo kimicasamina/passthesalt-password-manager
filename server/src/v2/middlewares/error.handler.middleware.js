@@ -1,5 +1,6 @@
 export const ErrorHandler = (err, req, res, next) => {
   console.log('Middleware Error Handling...');
+  console.log('ERR...: ', err.message);
 
   const errStatus = err.statusCode || 500; // Default to 500 if statusCode isn't set
   const errMsg = err.message || 'Something went wrong'; // Fallback message

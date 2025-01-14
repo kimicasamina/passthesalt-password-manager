@@ -1,20 +1,21 @@
 import bcrypt from 'bcryptjs';
 import { generateJWT } from '../utils/jwtUtils.js';
 import AuthService from '../services/Auth.service.js';
-import expressAsyncHandler from 'express-async-handler';
+import asyncHandler from 'express-async-handler';
 import User from '../models/user.model.js';
 import { CustomError } from '../utils/errors/CustomError.js';
 import { createError } from '../utils/errors/createError.js';
 import { DatabaseError } from '../utils/errors/DatabaseError.js';
+import { comparePassword } from '../utils/bcryptUtils.js';
 
 // Register new user
-export const register = expressAsyncHandler(async (req, res, next) => {
+export const register = asyncHandler(async (req, res, next) => {
   const { username, email, password } = req.body;
 
   const existingUser = await User.findOne({
     where: { email },
     // Use the 'withoutPassword' scope to exclude the password field
-    ...User.scope('withoutPassword'),
+    // ...User.scope('withoutPassword'),
   });
   if (existingUser) {
     // throw new CustomError('User already registered', 400);
@@ -45,17 +46,17 @@ export const register = expressAsyncHandler(async (req, res, next) => {
 });
 
 // Login existing user
-export const login = expressAsyncHandler(async (req, res, next) => {
+export const login = asyncHandler(async (req, res, next) => {
   const user = await AuthService.findUserByEmail(req.body.email);
   // if (!user) throw new Error('User not found.', 404); // Throw a custom error with statusCode
-  if (!user)
-    // return next(new CustomError('User not found.', 404));
-    return res.status(400).json({
-      success: false,
-      message: 'User not found',
-    });
+  // if (!user)
+  //   // return next(new CustomError('User not found.', 404));
+  //   return res.status(400).json({
+  //     success: false,
+  //     message: 'User not found',
+  //   });
 
-  const isPasswordCorrect = await bcrypt.compare(
+  const isPasswordCorrect = await comparePassword(
     req.body.password,
     user.password,
   );
@@ -84,7 +85,7 @@ export const login = expressAsyncHandler(async (req, res, next) => {
 });
 
 // Logout user
-export const logoutUser = expressAsyncHandler(async (req, res, next) => {
+export const logoutUser = asyncHandler(async (req, res, next) => {
   res.clearCookie('access_token');
   return res.status(200).json({
     success: true,
@@ -92,7 +93,7 @@ export const logoutUser = expressAsyncHandler(async (req, res, next) => {
   });
 });
 
-export const getUserDetails = expressAsyncHandler(async (req, res, next) => {
+export const getUserDetails = asyncHandler(async (req, res, next) => {
   // Check if req.user is properly set by the JWT authentication middleware
   if (!req.user || !req.user.id) {
     // return next(createError('User not authenticated.', 401)); // Handle missing user info
