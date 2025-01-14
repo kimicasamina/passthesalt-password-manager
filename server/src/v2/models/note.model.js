@@ -18,6 +18,14 @@ const Note = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    // folder_id: {
+    //   type: DataTypes.UUID,
+    //   allowNull: true,
+    // },
+    // user_id: {
+    //   type: DataTypes.UUID,
+    //   allowNull: true,
+    // },
   },
   {
     timestamps: true,

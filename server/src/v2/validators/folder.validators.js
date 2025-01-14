@@ -7,3 +7,4 @@ export const folderSchema = Joi.object({
     'string.max': 'Folder name can be at most 50 characters long',
   }),
 });
+

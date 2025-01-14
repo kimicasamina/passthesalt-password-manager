@@ -17,6 +17,10 @@ const Folder = sequelize.define(
     description: {
       type: DataTypes.STRING,
     },
+    // user_id: {
+    //   type: DataTypes.UUID,
+    //   allowNull: true,
+    // },
   },
   {
     timestamps: true,

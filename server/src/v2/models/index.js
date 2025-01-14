@@ -8,8 +8,8 @@ const defineAssociations = () => {
   User.hasMany(Login, { foreignKey: 'user_id', as: 'logins' });
   User.hasMany(Note, { foreignKey: 'user_id', as: 'notes' });
   User.hasMany(Folder, { foreignKey: 'user_id', as: 'folders' });
-  Folder.hasMany(Login, { foreignKey: 'user_id', as: 'logins' });
-  Folder.hasMany(Note, { foreignKey: 'user_id', as: 'notes' });
+  Folder.hasMany(Login, { foreignKey: 'folder_id', as: 'logins' });
+  Folder.hasMany(Note, { foreignKey: 'folder_id', as: 'notes' });
 
   Login.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
   Login.belongsTo(Folder, { foreignKey: 'folder_id', as: 'folder' });

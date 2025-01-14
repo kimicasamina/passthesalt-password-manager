@@ -1,17 +1,19 @@
-import { ValidationError } from '../utils/errors/ValidationError.js';
+// import { ValidationError } from '../utils/errors/CustomError.js';
 
 export const validate = (schema, location = 'body') => {
   return (req, res, next) => {
-    const dataToValidate = req[location];
+    const dataToValidate = req[location]; // Body, query, params, etc.
     const { error } = schema.validate(dataToValidate);
 
     if (error) {
-      // Extract all error messages from Joi validation
-      const validationErrors = error.details.map((err) => err.message);
-      // Throw a ValidationError to be handled by the global error handler
-      return next(new ValidationError(validationErrors));
+      // If validation fails, return a 400 status code and the error details
+      return res.status(400).json({
+        success: false,
+        message: 'Validation Error',
+        errors: error.details[0].message,
+      });
     }
 
-    next(); // Validation passed, move to the next middleware
+    next(); // Proceed to the next middleware/route handler
   };
 };

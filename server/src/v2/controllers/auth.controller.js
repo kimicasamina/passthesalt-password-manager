@@ -1,94 +1,138 @@
 import bcrypt from 'bcryptjs';
-import { User } from '../models/index.js';
-import {
-  findUserByEmail,
-  createUser,
-  findUserById,
-} from '../services/auth.services.js';
-import generateJWT from '../utils/jwtUtils.js';
-// import { createError } from '../utils/createError.js';
+import { generateJWT } from '../utils/jwtUtils.js';
+import AuthService from '../services/Auth.service.js';
+import expressAsyncHandler from 'express-async-handler';
+import User from '../models/user.model.js';
+import { CustomError } from '../utils/errors/CustomError.js';
+import { createError } from '../utils/errors/createError.js';
+import { DatabaseError } from '../utils/errors/DatabaseError.js';
 
-// Register a new user
-export const register = async (req, res, next) => {
+// Register new user
+export const register = expressAsyncHandler(async (req, res, next) => {
   const { username, email, password } = req.body;
 
-  try {
-    const user = await findUserByEmail(email);
-    // if (user) {
-    //   return next(createError(400, 'User is already registered'));
-    // }
-
-    // await createUser(username, email, password);
-    res.status(201).json({ message: 'Successfully created a new user' });
-  } catch (err) {
-    next(err);
+  const existingUser = await User.findOne({
+    where: { email },
+    // Use the 'withoutPassword' scope to exclude the password field
+    ...User.scope('withoutPassword'),
+  });
+  if (existingUser) {
+    // throw new CustomError('User already registered', 400);
+    // const error = createError('User already registered.', 400);
+    // throw error;
+    return res.status(400).json({
+      success: false,
+      message: 'User already registered',
+    });
   }
-};
 
-// Login a user
-export const login = async (req, res, next) => {
-  const { email, password } = req.body;
+  const user = await AuthService.createUser(username, email, password);
+  const token = generateJWT(user);
 
-  try {
-    const user = await findUserByEmail(email);
-    if (!user) {
-      return next(createError(400, 'User not found'));
-    }
+  res.cookie('access_token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict',
+    maxAge: 3600000,
+    path: '/',
+  });
 
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
-    if (!isPasswordCorrect) {
-      return next(createError(400, 'Password is incorrect.'));
-    }
+  return res.status(201).json({
+    success: true,
+    message: 'User successfully registered.',
+    token,
+  });
+});
 
-    const token = generateJWT(user.id, process.env.JWT_SECRET);
-
-    res.cookie('access_token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Strict',
-      maxAge: 3600000, // 1 hour
-      path: '/',
+// Login existing user
+export const login = expressAsyncHandler(async (req, res, next) => {
+  const user = await AuthService.findUserByEmail(req.body.email);
+  // if (!user) throw new Error('User not found.', 404); // Throw a custom error with statusCode
+  if (!user)
+    // return next(new CustomError('User not found.', 404));
+    return res.status(400).json({
+      success: false,
+      message: 'User not found',
     });
 
-    const { password: _, ...userDetails } = user.get();
-    res.status(200).json({
-      success: true,
-      message: 'User logged in successfully',
-      user: userDetails,
+  const isPasswordCorrect = await bcrypt.compare(
+    req.body.password,
+    user.password,
+  );
+  if (!isPasswordCorrect)
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid credentials.',
     });
-  } catch (err) {
-    next(createError(500, 'Failed to login'));
-  }
-};
+
+  // Pass the entire user object (not just the user.id) to generateJWT
+  const token = generateJWT(user);
+
+  res.cookie('access_token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict',
+    maxAge: 3600000,
+    path: '/',
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: 'User logged in successfully.',
+    token,
+  });
+});
 
 // Logout user
-export const logoutUser = async (req, res, next) => {
-  try {
-    const token = req.cookies.access_token;
-    if (!token) {
-      return next(createError(400, 'No token found'));
-    }
+export const logoutUser = expressAsyncHandler(async (req, res, next) => {
+  res.clearCookie('access_token');
+  return res.status(200).json({
+    success: true,
+    message: 'User logged out successfully.',
+  });
+});
 
-    res.clearCookie('access_token');
-    res.status(200).json({ message: 'Logged out successfully' });
-  } catch (err) {
-    next(createError(500, 'Failed to logout'));
+export const getUserDetails = expressAsyncHandler(async (req, res, next) => {
+  // Check if req.user is properly set by the JWT authentication middleware
+  if (!req.user || !req.user.id) {
+    // return next(createError('User not authenticated.', 401)); // Handle missing user info
+    return res.status(401).json({
+      success: false,
+      message: 'User not authenticated..',
+    });
   }
-};
 
-// Get authenticated user info
-export const getAuth = async (req, res, next) => {
   const { id } = req.user;
 
+  console.log('ID: ', id);
+
   try {
-    const user = await findUserById(id);
+    const user = await AuthService.findUserById(id);
 
     if (!user) {
-      return next(createError(400, 'User not found'));
+      return res.status(400).json({
+        success: false,
+        message: 'User details retrieved successfully.',
+      });
+      // return next(createError('User not found.', 404)); // Handle user not found
     }
 
-    res.status(200).json({ user });
-  } catch (err) {
-    next(createError(400, err.message));
+    // Prepare the user data excluding internal fields
+    const userData = {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      logins: user.logins,
+      notes: user.notes,
+      folders: user.folders,
+    };
+
+    return res.status(200).json({
+      success: true,
+      message: 'User details retrieved successfully.',
+      user: userData,
+    });
+  } catch (error) {
+    next(error); // Pass any errors to the error handler
   }
-};
+});

@@ -3,6 +3,7 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.config.js';
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
+import { encrypt } from '../utils/encryptionHandler.js';
 
 const User = sequelize.define(
   'User',
@@ -12,12 +13,15 @@ const User = sequelize.define(
       primaryKey: true,
       defaultValue: uuidv4,
     },
-    username: {
+    email: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
+      validate: {
+        isEmail: true,
+      },
     },
-    email: {
+    username: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
@@ -26,12 +30,33 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+
+    // id: {
+    //   type: DataTypes.UUID,
+    //   primaryKey: true,
+    //   defaultValue: uuidv4,
+    // },
+    // username: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    //   unique: true,
+    // },
+    // email: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    //   unique: true,
+    // },
+    // password: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    // },
   },
   {
     timestamps: true,
     hooks: {
       beforeCreate: async (user) => {
-        user.password = await hashPassword(user.password);
+        const hashed = await hashPassword(user.password); // Encrypt password
+        user.password = hashed;
       },
     },
   },

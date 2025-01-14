@@ -1,19 +1,35 @@
 import jwt from 'jsonwebtoken';
+import { createError } from '../utils/errors/CustomError.js';
+import expressAsyncHandler from 'express-async-handler';
+import dotenv from 'dotenv';
 
-export const authenticateJWT = (req, res, next) => {
+dotenv.config();
+
+export const authenticateJWT = expressAsyncHandler(async (req, res, next) => {
   const token =
     req.cookies.access_token ||
-    req.header('Authorization')?.replace('Bearer ', '');
+    req.header('Authorization')?.replace('Bearer ', ''); // Extract token from either cookies or header
 
   if (!token) {
-    return next(createError(400, 'No token found.'));
+    return res.status(400).json({
+      success: false,
+      message: 'No token found. Please log in.',
+    });
   }
 
   try {
+    // Verify the JWT token and decode it
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
+
+    // Attach decoded user info to req.user
+    req.user = decoded; // { id, email, username }
+
+    // Proceed to the next middleware/controller
     next();
   } catch (err) {
-    next(createError(400, err.message));
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid or expired token.',
+    });
   }
-};
+});
