@@ -4,29 +4,6 @@ import { encrypt } from '../utils/encryptionHandler';
 
 // Create a new login entry
 export const createLogin = asyncHandler(async (req, res) => {
-  // const { user_id, folder_id, name, email, username, password, website } =
-  //   req.body;
-
-  // // Encrypt password
-  // const encryptedData = await encrypt(password);
-
-  // const login = await Login.create({
-  //   user_id,
-  //   folder_id: folder_id || null, // Folder can be null
-  //   name,
-  //   email,
-  //   username,
-  //   password: encryptedData.password,
-  //   iv: encryptedData.iv, // Ensure iv is passed here
-  //   website,
-  // });
-
-  // res.status(201).json({
-  //   success: true,
-  //   message: 'Login created successfully.',
-  //   login,
-  // });
-
   const { user_id, folder_id, name, email, username, password, website } =
     req.body;
 
@@ -65,8 +42,8 @@ export const createLogin = asyncHandler(async (req, res) => {
       login,
     });
   } catch (error) {
-    console.error('Error creating note:', error);
-    return res.status(500).json({ message: 'Error creating note' });
+    console.error('Error creating login:', error);
+    return res.status(500).json({ message: 'Error creating login' });
   }
 });
 

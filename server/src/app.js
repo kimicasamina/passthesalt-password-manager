@@ -6,6 +6,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import authRoutes from './v2/routes/auth.routes.js';
 import loginRoutes from './v2/routes/login.routes.js';
+import folderRoutes from './v2/routes/folder.routes.js';
 // import { errorHandler } from './v2/middlewares/error.middleware.js';
 import { ErrorHandler } from './v2/middlewares/error.handler.middleware.js';
 dotenv.config();
@@ -27,6 +28,7 @@ app.use(helmet());
 
 app.use('/api/v2/auths', authRoutes);
 app.use('/api/v2/logins', loginRoutes);
+app.use('/api/v2/folders', folderRoutes);
 
 // Global error handler
 app.use(ErrorHandler);
