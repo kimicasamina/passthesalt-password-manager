@@ -1,25 +1,28 @@
 import express from 'express';
-import { validate } from '../middlewares/validation.middleware.js';
 import {
   createFoler,
   updateFolder,
   deleteFolder,
   getFolderById,
+  getAllFolder,
 } from '../controllers/folder.controller.js';
 import { authenticateJWT } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-// Create a login
-router.post('/', createFoler);
+// Create a folder
+router.post('/', authenticateJWT, createFoler);
 
-// Get a login by ID
-router.get('/:id', getFolderById);
+// Get a folder by ID
+router.get('/:id', authenticateJWT, getFolderById);
 
-// Delete a login
-router.delete('/:id', deleteFolder);
+// Get a all folders by User ID
+router.get('/', authenticateJWT, getAllFolder);
 
-// Update login
-router.put('/:id', updateFolder);
+// Delete a folder
+router.delete('/:id', authenticateJWT, deleteFolder);
+
+// Update folder
+router.put('/:id', authenticateJWT, updateFolder);
 
 export default router;

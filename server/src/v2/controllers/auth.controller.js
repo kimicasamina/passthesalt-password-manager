@@ -94,18 +94,7 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
 });
 
 export const getUserDetails = asyncHandler(async (req, res, next) => {
-  // Check if req.user is properly set by the JWT authentication middleware
-  if (!req.user || !req.user.id) {
-    // return next(createError('User not authenticated.', 401)); // Handle missing user info
-    return res.status(401).json({
-      success: false,
-      message: 'User not authenticated..',
-    });
-  }
-
   const { id } = req.user;
-
-  console.log('ID: ', id);
 
   try {
     const user = await AuthService.findUserById(id);

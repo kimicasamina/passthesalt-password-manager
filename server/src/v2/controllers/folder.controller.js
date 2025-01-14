@@ -3,11 +3,12 @@ import asyncHandler from 'express-async-handler';
 
 // Create new Folder
 export const createFoler = asyncHandler(async (req, res) => {
-  const { user_id, name, description } = req.body;
+  const { id } = req.user;
+  const { name, description } = req.body;
 
   try {
     // Find the user
-    const user = await User.findByPk(user_id);
+    const user = await User.findByPk(id);
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -15,7 +16,7 @@ export const createFoler = asyncHandler(async (req, res) => {
 
     // Create the folder
     const folder = await Folder.create({
-      user_id,
+      user_id: user.id,
       name,
       description,
     });
@@ -55,7 +56,7 @@ export const updateFolder = asyncHandler(async (req, res) => {
 
   const folder = await Folder.findOne({
     where: { id: folder_id },
-    include: ['notes', 'logins'], // Including associated Model
+    include: ['logins'], // Including associated Model
   });
 
   if (!folder) {
@@ -78,7 +79,7 @@ export const getFolderById = asyncHandler(async (req, res) => {
 
   const folder = await Folder.findOne({
     where: { id: folder_id },
-    include: ['notes', 'logins'], // Including associated Model
+    include: ['logins'], // Including associated Model
   });
 
   if (!folder) {
@@ -89,5 +90,25 @@ export const getFolderById = asyncHandler(async (req, res) => {
     success: true,
     message: 'Folder retrieved successfully.',
     folder,
+  });
+});
+
+// Get all folder by User Id
+export const getAllFolder = asyncHandler(async (req, res) => {
+  const { id } = req.user;
+
+  const folders = await Folder.findAll({
+    where: { user_id: id },
+    // include: ['user', 'folder'], // Including associated User and Folder
+  });
+
+  if (!folders) {
+    return res.status(404).json({ error: 'Folder not found' });
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: 'Folder retrieved successfully.',
+    folders,
   });
 });

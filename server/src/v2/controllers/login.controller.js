@@ -4,12 +4,12 @@ import { encrypt } from '../utils/encryptionHandler';
 
 // Create a new login entry
 export const createLogin = asyncHandler(async (req, res) => {
-  const { user_id, folder_id, name, email, username, password, website } =
-    req.body;
+  const { id } = req.user;
+  const { folder_id, name, email, username, password, website } = req.body;
 
   try {
     // Find the user and folder
-    const user = await User.findByPk(user_id);
+    const user = await User.findByPk(id);
     const folder = folder_id ? await Folder.findByPk(folder_id) : null;
 
     if (!user) {
@@ -26,7 +26,7 @@ export const createLogin = asyncHandler(async (req, res) => {
 
     // Create the note
     const login = await Login.create({
-      user_id,
+      user_id: user.id,
       folder_id: folder ? folder.id : null,
       name,
       email,
@@ -102,5 +102,24 @@ export const getLoginById = asyncHandler(async (req, res) => {
     success: true,
     message: 'Login retrieved successfully.',
     login,
+  });
+});
+
+// Get all Logins by User Id
+export const getAllLogins = asyncHandler(async (req, res) => {
+  const { id } = req.user;
+  const logins = await Login.findAll({
+    where: { user_id: id },
+    // include: ['user', 'folder'], // Including associated User and Folder
+  });
+
+  if (!logins) {
+    return res.status(404).json({ error: 'Login not found' });
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: 'Login retrieved successfully.',
+    logins,
   });
 });
