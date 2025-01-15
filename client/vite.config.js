@@ -21,19 +21,19 @@ export default defineConfig({
     },
   },
   plugins: [react()],
-  server: {
-    proxy: {
-      // Replace `/api` with your endpoint
-      "/api": {
-        // target:
-        //   process.env.VITE_MODE === "production"
-        //     ? process.env.VITE_API_URL
-        //     : "http://localhost:6060",
-        target: process.env.VITE_API_URL,
-        changeOrigin: true,
-        secure: false, // Use this if you have an insecure API (HTTP instead of HTTPS)
-        rewrite: (path) => path.replace(/^\/api/, ""), // Optional: rewrite path if needed
-      },
-    },
-  },
+  // server: {
+  //   proxy: {
+  //     // Replace `/api` with your endpoint
+  //     "/api": {
+  //       // target:
+  //       //   process.env.VITE_MODE === "production"
+  //       //     ? process.env.VITE_API_URL
+  //       //     : "http://localhost:6060",
+  //       target: process.env.VITE_API_URL,
+  //       changeOrigin: true,
+  //       secure: false, // Use this if you have an insecure API (HTTP instead of HTTPS)
+  //       rewrite: (path) => path.replace(/^\/api/, ""), // Optional: rewrite path if needed
+  //     },
+  //   },
+  // },
 });

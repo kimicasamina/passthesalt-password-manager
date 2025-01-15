@@ -21,7 +21,7 @@ export default function Header() {
             placeholder="Search..."
           />
         </div>
-        {user ? (
+        {user && user.username ? (
           <div className="flex gap-x-2">
             <NewItem />
             <User user={user} logout={logout} />

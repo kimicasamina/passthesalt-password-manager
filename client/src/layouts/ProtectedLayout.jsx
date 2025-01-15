@@ -9,6 +9,7 @@ export default function ProtectedLayout() {
   if (error) return <div>{error}</div>; // Show error state
   if (!user) return <Navigate to="/login" />; // Redirect to login if not authenticated
 
+  console.log("HELLO WORLD...");
   return (
     <div className="h-full w-full flex flex-col">
       <Outlet />

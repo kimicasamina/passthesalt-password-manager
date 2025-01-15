@@ -27,7 +27,7 @@ const Register = () => {
       console.log("Registration successful:", data.msg);
 
       // Redirect to login page or dashboard upon success
-      navigate("/login"); // Redirect to login page or dashboard
+      navigate("/"); // Redirect to login page or dashboard
     } catch (err) {
       console.log("Registration failed:", err);
       setError(err); // Set error message if the registration fails

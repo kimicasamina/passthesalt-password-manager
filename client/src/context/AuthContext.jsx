@@ -8,14 +8,20 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
         const response = await AuthService.getAuth();
-        setUser(response.user);
+        const user = {
+          username: response.user.username,
+          id: response.user.id,
+          email: response.user.email,
+        };
+        console.log("DETAILS...", user);
+        setUser(user);
       } catch (error) {
         setError("Not authenticated");
       } finally {

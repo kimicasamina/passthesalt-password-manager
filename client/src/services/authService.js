@@ -1,11 +1,17 @@
 import axios from "axios";
+import axiosInstance from "./axiosClient";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const AuthService = {
   async register(username, email, password) {
     try {
-      const response = await axios.post(`${API_URL}/api/auth/register`, {
+      // const response = await axiosInstance.post("/api/v2/auths/register", {
+      //   username,
+      //   email,
+      //   password,
+      // });
+      const response = await axios.post(`${API_URL}/api/v2/auths/register`, {
         username,
         email,
         password,
@@ -19,10 +25,16 @@ const AuthService = {
   async login(email, password) {
     try {
       const response = await axios.post(
-        `${API_URL}/api/auth/login`,
+        `${API_URL}/api/v2/auths/login`,
         { email, password },
         { withCredentials: true }
       );
+
+      // const response = await axiosInstance.post(
+      //   "/api/v2/auths/login",
+      //   { email, password },
+      //   { withCredentials: true }
+      // );
       return response.data;
     } catch (error) {
       handleAuthError(error);
@@ -31,7 +43,7 @@ const AuthService = {
 
   async logout() {
     try {
-      const response = await axios.delete(`${API_URL}/api/auth/logout`, {
+      const response = await axios.delete(`${API_URL}/api/v2/auths/logout`, {
         withCredentials: true,
       });
       return response.data;
@@ -42,7 +54,7 @@ const AuthService = {
 
   async getAuth() {
     try {
-      const response = await axios.get(`${API_URL}/api/auth/user`, {
+      const response = await axios.get(`${API_URL}/api/v2/auths/me`, {
         withCredentials: true,
       });
       return response.data;

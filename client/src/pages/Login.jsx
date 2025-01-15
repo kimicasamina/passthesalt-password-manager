@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, redirect } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import ValidationRules from "../utils/validationRules";
 import useForm from "../hooks/useForm";
@@ -19,7 +19,7 @@ const Login = () => {
     try {
       const data = await AuthService.login(values.email, values.password);
       login(data.user);
-      navigate("/"); // Redirect to homepage after login success
+      navigate("/");
     } catch (error) {
       console.error("Login failed:", error);
       setError(error);
