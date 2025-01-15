@@ -2,10 +2,10 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const PasswordService = {
-  async getAllPassword() {
+const FolderService = {
+  async getAllFolders() {
     try {
-      const response = await axios.get(`${API_URL}/api/v2/logins/`, {
+      const response = await axios.get(`${API_URL}/api/v2/folders/`, {
         withCredentials: true,
       });
       return response.data;
@@ -14,11 +14,11 @@ const PasswordService = {
     }
   },
 
-  async addNewPassword(name, username, email, password, website, folder_id) {
+  async addNewFolder(name, content) {
     try {
       const response = await axios.post(
-        `${API_URL}/api/v2/logins/`,
-        { name, username, email, password, website, folder_id },
+        `${API_URL}/api/v2/folders`,
+        { name, content },
         { withCredentials: true }
       );
       return response.data;
@@ -56,4 +56,4 @@ const handleError = (error) => {
   throw new Error(errorMessage);
 };
 
-export default PasswordService;
+export default FolderService;

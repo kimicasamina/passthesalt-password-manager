@@ -1,14 +1,17 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import ListItem from "./ListItem";
+import PasswordService from "../../services/passwordService";
 
 const ItemList = ({ selectedMenu, selectedItem, onSelect }) => {
   const { user } = useAuth();
+  const [passwords, setPasswords] = useState(null);
+  const [all, setAll] = useState(null);
 
   const menuDataMap = useMemo(
     () => ({
       all: user.logins || [],
-      passwords: user.logins || [],
+      passwords: passwords ? passwords : [],
       favorites: user.logins || [],
     }),
     [user]
@@ -43,6 +46,16 @@ const ItemList = ({ selectedMenu, selectedItem, onSelect }) => {
       </ul>
     );
   };
+
+  useEffect(() => {
+    async function fetchAllPasswords() {
+      const data = await PasswordService.getAllPassword();
+      console.log("DATA:", data);
+      setPasswords([...data.logins]);
+    }
+
+    fetchAllPasswords();
+  }, []);
 
   return (
     <div className="w-full flex flex-col">

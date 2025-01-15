@@ -1,24 +1,26 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 
-const SidebarMenu = ({ onSelect, selectedMenu }) => {
+const SidebarMenu = ({ folders, onSelect, selectedMenu }) => {
   const menuList = useMemo(
     () => [
-      { id: "all", label: "All Items" },
-      { id: "favorites", label: "Favorites" },
-      { id: "passwords", label: "Passwords" },
-      { id: "notes", label: "Notes" },
+      { id: "all", name: "All Items" },
+      { id: "favorites", name: "Favorites" },
+      { id: "passwords", name: "Passwords" },
+      { id: "notes", name: "Notes" },
     ],
     []
   );
 
-  const categories = useMemo(
-    () => [
-      { id: "banking", label: "Banking" },
-      { id: "socialmedia", label: "Social Media" },
-    ],
-    []
-  );
+  console.log("FODLERS", folders);
+
+  // const categories = useMemo(
+  //   () => [
+  //     { id: "banking", label: "Banking" },
+  //     { id: "socialmedia", label: "Social Media" },
+  //   ],
+  //   []
+  // );
 
   return (
     <div className="w-full">
@@ -34,15 +36,18 @@ const SidebarMenu = ({ onSelect, selectedMenu }) => {
       </ul>
 
       <h2 className="text-xs font-semibold text-accent mb-2">Folders</h2>
+
       <ul className="flex flex-col gap-y-1">
-        {categories.map((item) => (
-          <MenuItem
-            key={item.id}
-            item={item}
-            selectedMenu={selectedMenu}
-            onSelect={onSelect}
-          />
-        ))}
+        {folders
+          ? folders.map((item, index) => (
+              <MenuItem
+                key={index}
+                item={item}
+                selectedMenu={selectedMenu}
+                onSelect={onSelect}
+              />
+            ))
+          : null}
       </ul>
     </div>
   );
@@ -55,7 +60,7 @@ const MenuItem = ({ item, selectedMenu, onSelect }) => (
         selectedMenu === item.id ? "text-accent" : "text-text"
       }`}
     >
-      {item.label}
+      {item.name}
     </span>
   </div>
 );

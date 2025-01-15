@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SidebarMenu from "../components/SidebarMenu/SidebarMenu";
 import ItemList from "../components/ItemList/ItemList";
 import ItemDetails from "../components/ItemDetails/ItemDetails";
+import FolderService from "../services/folderService";
 
 export default function Home() {
+  const [folders, setFolders] = useState(null);
+  const [passwords, setPasswords] = useState(null);
   const [selectedMenu, setSelectedMenu] = useState("all");
   const [selectedItem, setSelectedItem] = useState(null); // Set to null for better state control
 
@@ -16,9 +19,23 @@ export default function Home() {
     setSelectedItem(item); // Set selected item
   };
 
+  useEffect(() => {
+    async function fetchFolders() {
+      const data = await FolderService.getAllFolders();
+      console.log("DATA...", data);
+      setFolders([...data.folders]);
+    }
+
+    fetchFolders();
+  }, []);
+
   return (
     <div className="flex w-full h-full">
-      <SidebarMenu selectedMenu={selectedMenu} onSelect={handleSelectMenu} />
+      <SidebarMenu
+        folders={folders}
+        selectedMenu={selectedMenu}
+        onSelect={handleSelectMenu}
+      />
       <ItemList
         selectedMenu={selectedMenu}
         selectedItem={selectedItem}

@@ -3,6 +3,8 @@ import React from "react";
 const ListItem = React.memo(({ item, selectedItem, onSelect }) => {
   const isSelected = selectedItem && selectedItem.id === item.id;
 
+  console.log("ITEM:", item);
+
   return (
     <li className="w-full flex">
       <span
