@@ -74,7 +74,7 @@ const ValidationRules = {
   validateSecretNote(values) {
     let errors = {};
 
-    if (!values.title) {
+    if (!values.name) {
       errors.title = "Title is required";
     }
 

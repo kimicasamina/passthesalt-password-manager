@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function userModalDialog() {
+export default function useModalDialog() {
   const [isOpen, setIsOpen] = useState(false);
   return {
     isOpen,

@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import AuthService from "../services/authService";
-import LoadingPage from "../components/common/LoadingPage";
+import LoadingPage from "../components/LoadingPage";
 
 const AuthContext = createContext();
 

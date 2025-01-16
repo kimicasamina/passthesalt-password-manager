@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import useForm from "../hooks/useForm";
-import InputField from "../components/common/InputField";
-import Button from "../components/common/Button";
+import InputField from "../components/InputField";
+import Button from "../components/Button";
 import ValidationRules from "../utils/validationRules";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../services/authService";

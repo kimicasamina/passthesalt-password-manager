@@ -2,10 +2,10 @@ import axios from "axios";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const PasswordService = {
-  async getAllPassword() {
+const NoteService = {
+  async getAllNote() {
     try {
-      const response = await axios.get(`${API_URL}/api/v2/logins/`, {
+      const response = await axios.get(`${API_URL}/api/v2/notes/`, {
         withCredentials: true,
       });
       return response.data;
@@ -14,32 +14,11 @@ const PasswordService = {
     }
   },
 
-  async addNewPassword(
-    name,
-    username,
-    email,
-    password,
-    favorites,
-    website,
-    folder_id
-  ) {
+  async addNewNote(name, content) {
     try {
       const response = await axios.post(
-        `${API_URL}/api/v2/logins/`,
-        { name, username, email, password, website, folder_id },
-        { withCredentials: true }
-      );
-      return response.data;
-    } catch (error) {
-      handleError(error);
-    }
-  },
-
-  async decryptPassword(iv, password) {
-    try {
-      const response = await axios.post(
-        `${API_URL}/api/v2/logins/decryptpassword/`,
-        { iv, password },
+        `${API_URL}/api/v2/notes`,
+        { name, content },
         { withCredentials: true }
       );
       return response.data;
@@ -77,4 +56,4 @@ const handleError = (error) => {
   throw new Error(errorMessage);
 };
 
-export default PasswordService;
+export default NoteService;

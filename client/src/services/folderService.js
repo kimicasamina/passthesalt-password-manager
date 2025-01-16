@@ -14,11 +14,11 @@ const FolderService = {
     }
   },
 
-  async addNewFolder(name, content) {
+  async addNewFolder(name, description) {
     try {
       const response = await axios.post(
         `${API_URL}/api/v2/folders`,
-        { name, content },
+        { name, description },
         { withCredentials: true }
       );
       return response.data;

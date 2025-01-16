@@ -1,13 +1,13 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { FaKey, FaPlusCircle, FaRegStickyNote, FaFolder } from "react-icons/fa";
-import userModalDialog from "../../hooks/useModalDialog";
-import ModalDialog from "../ModalDialog";
-import Form from "../Form";
+import useModalDialog from "../../hooks/useModalDialog";
+import ModalDialog from "../../components/ModalDialog";
+import Form from "../../components/Form";
 
-export default function NewItem() {
+export default function AddForms() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState(null);
-  const { isOpen, open, close } = userModalDialog();
+  const { isOpen, open, close } = useModalDialog();
 
   // Menu list definition
   const menuList = useMemo(
@@ -130,7 +130,7 @@ export default function NewItem() {
               ? "Add New Secret Note"
               : "Add New Folder"}
           </h1>
-          <Form selectedMenu={selectedMenu} onClose={onClose} />
+          <Form selectedMenu={selectedMenu} onClose={close} />
         </ModalDialog>
       )}
     </>

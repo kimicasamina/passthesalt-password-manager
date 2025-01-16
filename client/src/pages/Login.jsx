@@ -3,8 +3,8 @@ import { useNavigate, Navigate, redirect } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import ValidationRules from "../utils/validationRules";
 import useForm from "../hooks/useForm";
-import Button from "../components/common/Button";
-import InputField from "../components/common/InputField";
+import Button from "../components/Button";
+import InputField from "../components/InputField";
 import AuthService from "../services/authService";
 
 const Login = () => {

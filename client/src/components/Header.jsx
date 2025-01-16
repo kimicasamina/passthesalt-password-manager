@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
-import NewItem from "../NewItem/NewItem";
-import User from "../User/User";
+import AddForms from "../features/AddForms";
+import User from "./User/User";
 
 export default function Header() {
   const { user, logout } = useAuth();
@@ -23,7 +23,7 @@ export default function Header() {
         </div>
         {user && user.username ? (
           <div className="flex gap-x-2">
-            <NewItem />
+            <AddForms />
             <User user={user} logout={logout} />
           </div>
         ) : (

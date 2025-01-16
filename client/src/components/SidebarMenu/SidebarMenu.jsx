@@ -1,7 +1,12 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import FolderService from "../../services/folderService";
+import useFoldersHook from "../../hooks/folders/useFoldersHook";
 
-const SidebarMenu = ({ folders, onSelect, selectedMenu }) => {
+const SidebarMenu = ({ onSelect, selectedMenu }) => {
+  const queryClient = useQueryClient();
+  const { folders, isLoading } = useFoldersHook();
   const menuList = useMemo(
     () => [
       { id: "all", name: "All Items" },
@@ -12,8 +17,6 @@ const SidebarMenu = ({ folders, onSelect, selectedMenu }) => {
     []
   );
 
-  console.log("FODLERS", folders);
-
   // const categories = useMemo(
   //   () => [
   //     { id: "banking", label: "Banking" },
@@ -21,6 +24,12 @@ const SidebarMenu = ({ folders, onSelect, selectedMenu }) => {
   //   ],
   //   []
   // );
+
+  console.log("FOLDER DATA...", folders);
+
+  if (isLoading) {
+    return <div className="">Loading...</div>;
+  }
 
   return (
     <div className="w-full">
@@ -38,8 +47,8 @@ const SidebarMenu = ({ folders, onSelect, selectedMenu }) => {
       <h2 className="text-xs font-semibold text-accent mb-2">Folders</h2>
 
       <ul className="flex flex-col gap-y-1">
-        {folders
-          ? folders.map((item, index) => (
+        {folders.folders
+          ? folders.folders.map((item, index) => (
               <MenuItem
                 key={index}
                 item={item}
