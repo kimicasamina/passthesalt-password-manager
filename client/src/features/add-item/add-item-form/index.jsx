@@ -1,19 +1,20 @@
 import React, { useMemo, useState, useCallback } from "react";
-import InputField from "./InputField";
-import Button from "./Button";
-import useForm from "../hooks/useForm";
-import ValidationRules from "../utils/validationRules";
-import PasswordService from "../services/passwordService";
-import NoteService from "../services/noteService";
-import FolderService from "../services/folderService";
-import SelectInput from "./SelectInput";
-import { useGlobalState } from "../context/GlobalStateContext";
-const Form = ({ selectedMenu, onClose }) => {
+import InputField from "../../../components/InputField";
+import Button from "../../../components/Button";
+import useForm from "../../../hooks/useForm";
+import ValidationRules from "../../../utils/validationRules";
+import PasswordService from "../../../services/passwordService";
+import NoteService from "../../../services/noteService";
+import FolderService from "../../../services/folderService";
+import SelectInput from "../../../components/SelectInput";
+import { useDispatch, useSelector } from "react-redux";
+import { addLogin, addFolder, addNote } from "../../../store/slice/userSlice";
+
+const AddItemForm = ({ selectedMenu, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { state, dispatch } = useGlobalState();
-  const { folders, passwords, notes } = state;
-  console.log("HELLO...", folders);
+  const { folders, notes, logins } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   // Ensure folders is always an array, fallback to an empty array if undefined
   const safeFolders = Array.isArray(folders) ? folders : [];
@@ -33,7 +34,7 @@ const Form = ({ selectedMenu, onClose }) => {
     ];
 
     const fieldConfigs = {
-      password: [
+      logins: [
         { name: "name", label: "Name", type: "text" },
         { name: "email", label: "Email", type: "email" },
         { name: "username", label: "Username", type: "text" },
@@ -65,8 +66,8 @@ const Form = ({ selectedMenu, onClose }) => {
 
   const validate = useMemo(() => {
     switch (selectedMenu) {
-      case "password":
-        return ValidationRules.validatePassword;
+      case "logins":
+        return ValidationRules.validatePassword; // Update this if needed for specific validation
       case "secret_note":
         return ValidationRules.validateSecretNote;
       case "folder":
@@ -84,28 +85,27 @@ const Form = ({ selectedMenu, onClose }) => {
 
       let data;
       switch (selectedMenu) {
-        case "password":
+        case "logins":
           data = await PasswordService.addNewPassword(
             values.name,
             values.username,
             values.email,
             values.password,
             values.website,
-            values.favorites,
             values.folder_id
           );
-          dispatch({ type: "ADD_PASSWORD", payload: data.login });
+          dispatch(addLogin(data.login)); // Dispatch action to update Redux store
           break;
         case "secret_note":
           data = await NoteService.addNewNote(values.name, values.content);
-          dispatch({ type: "ADD_NOTE", payload: data.note });
+          dispatch(addNote(data.note)); // Dispatch action to update Redux store
           break;
         case "folder":
           data = await FolderService.addNewFolder(
             values.name,
             values.description
           );
-          dispatch({ type: "ADD_FOLDER", payload: data.folder });
+          dispatch(addFolder(data.folder)); // Dispatch action to update Redux store
           break;
         default:
           throw new Error("Invalid menu selected");
@@ -180,4 +180,4 @@ const Form = ({ selectedMenu, onClose }) => {
   );
 };
 
-export default Form;
+export default AddItemForm;

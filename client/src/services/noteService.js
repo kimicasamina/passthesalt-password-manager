@@ -27,27 +27,29 @@ const NoteService = {
     }
   },
 
-  //   async logout() {
-  //     try {
-  //       const response = await axios.delete(`${API_URL}/api/v2/auths/logout`, {
-  //         withCredentials: true,
-  //       });
-  //       return response.data;
-  //     } catch (error) {
-  //       handleAuthError(error);
-  //     }
-  //   },
+  async updateNote(noteId, name, content, folder_id) {
+    try {
+      const response = await axios.put(
+        `${API_URL}/api/v2/notes/${noteId}`,
+        { name, content, folder_id },
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
 
-  //   async getAuth() {
-  //     try {
-  //       const response = await axios.get(`${API_URL}/api/v2/auths/me`, {
-  //         withCredentials: true,
-  //       });
-  //       return response.data;
-  //     } catch (error) {
-  //       handleAuthError(error);
-  //     }
-  //   },
+  async deleteNote(noteId) {
+    try {
+      const response = await axios.delete(`${API_URL}/api/v2/notes/${noteId}`, {
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
 };
 
 const handleError = (error) => {

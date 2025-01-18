@@ -8,7 +8,7 @@ export default function useFetchPasswords() {
     const fetchData = async () => {
       const data = await PasswordService.getAllPassword();
       console.log("FETCHING ALL PASSWORDS...", data);
-      setPasswords(data.logins);
+      setPasswords([...data.logins]);
     };
 
     fetchData();

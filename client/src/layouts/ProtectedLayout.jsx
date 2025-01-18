@@ -1,18 +1,40 @@
-import React from "react";
-import { useAuth } from "../context/AuthContext";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Outlet, Navigate } from "react-router-dom";
+import AuthService from "../services/authService";
+import { setInitialData } from "../store/slice/userSlice";
 
 export default function ProtectedLayout() {
-  const { user, loading, error } = useAuth();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user); // Ensure you are accessing `user` data
 
-  if (loading) return <LoadingPage />; // Show loading state
-  if (error) return <div>{error}</div>; // Show error state
-  if (!user) return <Navigate to="/login" />; // Redirect to login if not authenticated
+  console.log("USER", user);
+  // If user is not logged in, redirect to login page
 
-  console.log("HELLO WORLD...");
-  return (
-    <div className="h-full w-full flex flex-col">
-      <Outlet />
-    </div>
-  );
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const data = await AuthService.getCurrentUser();
+        const user = {
+          user: data.user,
+          ...data.user,
+        };
+        dispatch(setInitialData(user)); // Dispatch user data
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    };
+
+    // Only fetch user data if it's not already in the store
+    if (!user) {
+      fetchUserData();
+    }
+  }, [user, dispatch]);
+
+  // Loading state while waiting for user data
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  return <Outlet />;
 }

@@ -1,37 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { RiEyeLine, RiEyeOffLine } from "react-icons/ri";
 import { RiClipboardLine } from "react-icons/ri";
-import PasswordService from "../../../../../../services/passwordService"; // Assuming this service exists
+
+import useDecryptPassword from "../../../../../../hooks/passwords/useDecryptPassword";
 
 const PasswordDetails = ({ passwordData }) => {
   const [decryptedPassword, setDecryptedPassword] = useState(null);
   const [showDecryptedPassword, setShowDecryptedPassword] = useState(false);
+  const { getDecryptedPassword } = useDecryptPassword();
 
-  // Decrypt the password using PasswordService
-  const decryptPassword = async () => {
-    try {
-      // Send request to the backend to decrypt the password
-      const data = await PasswordService.decryptPassword(
+  // Toggle password visibility: decrypts the password
+  const togglePasswordVisibility = async () => {
+    if (!showDecryptedPassword) {
+      // decryptPassword(); // Decrypt the password when the user opts to show it
+      const password = await getDecryptedPassword(
         passwordData.iv,
         passwordData.password
       );
-      console.log("DATA: ", data);
-      setDecryptedPassword(data.password);
+      setDecryptedPassword(password);
       setShowDecryptedPassword(true);
 
       // Hide the decrypted password after 3000ms (3 seconds)
       setTimeout(() => {
         setShowDecryptedPassword(false);
       }, 3000);
-    } catch (error) {
-      console.error("Decryption failed:", error);
-    }
-  };
-
-  // Toggle password visibility: decrypts the password
-  const togglePasswordVisibility = () => {
-    if (!showDecryptedPassword) {
-      decryptPassword(); // Decrypt the password when the user opts to show it
     } else {
       setShowDecryptedPassword(false); // Hide the password if it's currently decrypted
     }
@@ -54,11 +46,11 @@ const PasswordDetails = ({ passwordData }) => {
   }, [passwordData]); // Re-run this effect when passwordData changes
 
   return (
-    <div className="flex items-center space-x-2">
-      <p className="flex-1">
+    <div className="flex items-center">
+      <div className="flex-1 flex items-center ">
         {/* Show the decrypted password if available and visibility is toggled */}
-        {showDecryptedPassword ? decryptedPassword : "********"}
-      </p>
+        {showDecryptedPassword ? decryptedPassword : "**********"}
+      </div>
 
       {/* Toggle visibility of the password */}
       <button

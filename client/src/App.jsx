@@ -1,16 +1,21 @@
 import { AuthProvider } from "./context/AuthContext";
 import { RouterProvider } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import router from "./router";
-const queryClient = new QueryClient();
-
+import { Toaster } from "react-hot-toast";
+import store from "./store/store";
+import { Provider } from "react-redux";
 function App() {
+  // const { state } = useGlobalState();
+  // console.log("THEME: ", state);
   return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </AuthProvider>
+    // <AuthProvider>
+    // </AuthProvider>
+    // <GlobalStateProvider>
+    // </GlobalStateProvider>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+      <Toaster />
+    </Provider>
   );
 }
 

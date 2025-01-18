@@ -2,26 +2,26 @@ import React from "react";
 
 const ListItem = React.memo(
   ({ item, onSelectType, selectedItem, onSelect }) => {
-    const isSelected = selectedItem && selectedItem.id === item.id;
+    const isSelected = selectedItem && selectedItem === item.id;
 
-    console.log("LIST ITEM:", item);
+    console.log("Is seLected:", isSelected);
 
     const handleOnClick = () => {
-      onSelect(item);
+      onSelect(item.id);
       if (item.content) {
         console.log("this is a note type");
-        onSelectType("note");
+        onSelectType("notes");
       } else {
         console.log("this is a password type");
-        onSelectType("password");
+        onSelectType("logins");
       }
     };
 
     return (
       <li className="w-full flex">
         <span
-          className={`w-full mb-2 hover:text-accent cursor-pointer ${
-            isSelected ? "text-accent" : "text-blue-500"
+          className={`w-full hover:text-secondary cursor-pointer ${
+            isSelected ? "text-secondary font-semibold" : "text-lightText"
           }`}
           onClick={handleOnClick}
         >

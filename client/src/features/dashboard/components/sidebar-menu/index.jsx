@@ -1,20 +1,22 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
+import { useSelector } from "react-redux";
 import MenuItem from "./menu-item";
 
-export default function SidebarMenu({ folders, selectedMenu, onSelect }) {
+export default function SidebarMenu({ selectedMenu, onSelect, folders }) {
   const menuList = useMemo(
     () => [
-      { id: "all", name: "All Items" },
+      { id: "all", name: "All" },
       { id: "favorites", name: "Favorites" },
-      { id: "passwords", name: "Passwords" },
+      { id: "logins", name: "Logins" },
       { id: "notes", name: "Notes" },
     ],
     []
   );
 
   return (
-    <div className="w-full">
-      <ul className="flex flex-col gap-y-1 mb-10">
+    <div className="w-full h-full bg-darkBackground px-8 py-8">
+      <h2 className="text-xs font-semibold text-secondary mb-2">Menu</h2>
+      <ul className="flex flex-col gap-y-0 mb-10">
         {menuList.map((item) => (
           <MenuItem
             key={item.id}
@@ -25,19 +27,20 @@ export default function SidebarMenu({ folders, selectedMenu, onSelect }) {
         ))}
       </ul>
 
-      <h2 className="text-xs font-semibold text-accent mb-2">Folders</h2>
-
-      <ul className="flex flex-col gap-y-1">
-        {folders
-          ? folders.map((item, index) => (
-              <MenuItem
-                key={index}
-                item={item}
-                selectedMenu={selectedMenu}
-                onSelect={onSelect}
-              />
-            ))
-          : null}
+      <h2 className="text-xs font-semibold text-secondary mb-2">Folders</h2>
+      <ul className="flex flex-col gap-y-0">
+        {folders && folders.length > 0 ? (
+          folders.map((folder) => (
+            <MenuItem
+              key={folder.id}
+              item={folder}
+              selectedMenu={selectedMenu}
+              onSelect={onSelect}
+            />
+          ))
+        ) : (
+          <li>No folders available</li>
+        )}
       </ul>
     </div>
   );

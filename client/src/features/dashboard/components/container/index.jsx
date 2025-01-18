@@ -1,24 +1,27 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import DetailsPage from "../details-page";
 import ItemList from "../item-list";
 import SidebarMenu from "../sidebar-menu";
-import useFetchFolders from "../../hooks/folders/useFetchFolders";
-import useFetchPasswords from "../../hooks/passwords/useFetchPasswords";
 
 export default function Container() {
   const [selectedMenu, setSelectedMenu] = useState("all");
-  const [selectedItem, setSelectedItem] = useState(null); // Set to null for better state control
+  const [selectedItem, setSelectedItem] = useState(null);
   const [itemType, setItemType] = useState(null);
-  const { folders } = useFetchFolders();
-  const { passwords } = useFetchPasswords();
+
+  // Correctly accessing the state
+  const { folders, notes, logins } = useSelector((state) => state.user); // Extract user data from state
+
+  console.log(`hello`, folders);
 
   const handleSelectMenu = (menu) => {
     setSelectedMenu(menu);
-    setSelectedItem(null); // Reset selected item when menu changes
+    setSelectedItem(null);
+    setItemType(null);
   };
 
-  const handleSelectItem = (item) => {
-    setSelectedItem(item); // Set selected item
+  const handleSelectItem = (id) => {
+    setSelectedItem(id);
     setItemType(null);
   };
 
@@ -28,26 +31,19 @@ export default function Container() {
 
   return (
     <div className="w-full h-full grid grid-cols-3">
-      {/* <SidebarMenu selectedMenu={selectedMenu} onSelect={handleSelectMenu} />
-      <ItemList
-        selectedMenu={selectedMenu}
-        selectedItem={selectedItem}
-        onSelect={handleSelectItem}
-      />
-      <ItemDetails selectedItem={selectedItem} /> */}
-
       <SidebarMenu
-        folders={folders}
         selectedMenu={selectedMenu}
         onSelect={handleSelectMenu}
+        folders={folders}
       />
       <ItemList
-        folders={folders}
-        passwords={passwords}
         selectedMenu={selectedMenu}
         selectedItem={selectedItem}
         onSelect={handleSelectItem}
         onSelectType={onSelectType}
+        notes={notes}
+        logins={logins}
+        folders={folders}
       />
       <DetailsPage selectedItem={selectedItem} itemType={itemType} />
     </div>

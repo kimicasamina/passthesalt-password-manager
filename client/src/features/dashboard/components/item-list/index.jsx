@@ -1,61 +1,86 @@
-import React, { forwardRef, useEffect, useMemo, useState } from "react";
-import PasswordService from "../../../../services/passwordService";
+import React, { useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 import ListItem from "./list-item";
-import useFetchFolders from "../../hooks/folders/useFetchFolders";
-import useFetchPasswords from "../../hooks/passwords/useFetchPasswords";
-import useNotes from "../../hooks/notes/useNotes";
 
 export default function ItemList({
   onSelectType,
   selectedMenu,
   selectedItem,
   onSelect,
+  logins,
+  notes,
+  folders,
 }) {
-  const [all, setAll] = useState([]);
   const [favorites, setFavorites] = useState([]);
-  const { folders } = useFetchFolders();
-  const { passwords } = useFetchPasswords();
-  const { notes } = useNotes();
+  const [all, setAll] = useState([]);
 
-  console.log("SELECTED ITEM: ", selectedMenu);
-  console.log("FOLDERS: ", folders);
+  // Update items based on logins and notes
+  useEffect(() => {
+    const combinedItems = [...logins, ...notes].sort(
+      (a, b) => a.createdAt - b.createdAt
+    );
 
-  const menuDataMap = useMemo(
-    () => ({
-      all: all || [],
-      passwords: passwords || [],
-      favorites: favorites || [],
-      notes: notes || [],
-    }),
-    [selectedMenu]
-  );
-
-  // const foldersDataMap =
-
-  const renderList = () => {
-    let items =
-      menuDataMap[selectedMenu] ||
-      folders?.map((folder) => {
-        if (folder.id == selectedMenu) {
-          console.log("MATCH", folder.name);
-          // items = [...folder.logins];
-          return [...folder.logins, ...folder.notes];
-        }
-      });
-    [];
-
-    folders?.forEach((folder) => {
-      if (folder.id == selectedMenu) {
-        console.log("MATCH", folder.name);
-        items = [...folder.logins];
-      }
+    setAll((prevAll) => {
+      const isSame =
+        prevAll.length === combinedItems.length &&
+        prevAll.every((item, index) => item.id === combinedItems[index].id);
+      return isSame ? prevAll : combinedItems;
     });
 
-    return items.length !== 0 ? (
-      <ul className="">
-        {items.map((item, index) => (
+    setFavorites((prevFavorites) => {
+      const filteredFavorites = [...logins, ...notes]
+        .filter((item) => item.favorites)
+        .sort((a, b) => a.createdAt - b.createdAt);
+
+      const isSame =
+        prevFavorites.length === filteredFavorites.length &&
+        prevFavorites.every(
+          (item, index) => item.id === filteredFavorites[index].id
+        );
+      return isSame ? prevFavorites : filteredFavorites;
+    });
+  }, [logins, notes]);
+
+  // Menu data map
+  const menuDataMap = useMemo(
+    () => ({
+      all,
+      logins,
+      favorites,
+      notes,
+    }),
+    [all, favorites, logins, notes]
+  );
+
+  const renderList = () => {
+    // Try to fetch items from the menuDataMap first
+    let items = menuDataMap[selectedMenu];
+
+    // If no items are found in menuDataMap, try to find the matching folder and get notes or logins
+    if (!items) {
+      const matchingFolder = folders.find((item) => item.id === selectedMenu);
+
+      if (matchingFolder) {
+        items = [...matchingFolder.notes, ...matchingFolder.logins].sort(
+          (a, b) => a.createdAt - b.createdAt
+        );
+      }
+    }
+
+    // If no items found, default to an empty array
+    if (!Array.isArray(items)) {
+      console.error("Expected 'items' to be an array, but got:", items);
+      items = [];
+    }
+
+    // If items is empty, return an empty message
+    if (items.length === 0) return <h1>List is empty</h1>;
+
+    return (
+      <ul className="w-full flex flex-col gap-y-2">
+        {items.map((item) => (
           <ListItem
-            key={index}
+            key={item.id}
             item={item}
             selectedItem={selectedItem}
             onSelect={onSelect}
@@ -63,10 +88,8 @@ export default function ItemList({
           />
         ))}
       </ul>
-    ) : (
-      <h1 className="">No Items...</h1>
     );
   };
 
-  return <div className="w-full">{renderList()}</div>;
+  return <div className="w-full h-full px-8 py-8">{renderList()}</div>;
 }

@@ -14,15 +14,7 @@ const PasswordService = {
     }
   },
 
-  async addNewPassword(
-    name,
-    username,
-    email,
-    password,
-    favorites,
-    website,
-    folder_id
-  ) {
+  async addNewPassword(name, username, email, password, website, folder_id) {
     try {
       const response = await axios.post(
         `${API_URL}/api/v2/logins/`,
@@ -41,6 +33,54 @@ const PasswordService = {
         `${API_URL}/api/v2/logins/decryptpassword/`,
         { iv, password },
         { withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+
+  // async addNewNote(name, content) {
+  //   try {
+  //     const response = await axios.post(
+  //       `${API_URL}/api/v2/notes`,
+  //       { name, content },
+  //       { withCredentials: true }
+  //     );
+  //     return response.data;
+  //   } catch (error) {
+  //     handleError(error);
+  //   }
+  // },
+
+  async updatePassword(
+    passwordId,
+    name,
+    username,
+    email,
+    password,
+    website,
+    folder_id
+  ) {
+    try {
+      const response = await axios.put(
+        `${API_URL}/api/v2/logins/${passwordId}`,
+        { name, username, email, password, website, folder_id },
+        { withCredentials: true }
+      );
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    }
+  },
+
+  async deletePassword(passwordId) {
+    try {
+      const response = await axios.delete(
+        `${API_URL}/api/v2/logins/${passwordId}`,
+        {
+          withCredentials: true,
+        }
       );
       return response.data;
     } catch (error) {

@@ -1,22 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Notes from "./notes";
 import Password from "./password";
+import { useSelector } from "react-redux";
 
 export default function DetailsPage({ selectedItem, itemType }) {
-  console.log("TYPE...", itemType);
+  const [item, setItem] = useState(null);
+  const { logins, notes } = useSelector((state) => state.user);
 
-  // Handle case when no item is selected
-  if (!selectedItem) {
-    return <h1 className="text-center">SELECTED ITEM IS EMPTY</h1>;
-  }
+  console.log("ITEM TYPE:", itemType);
 
-  // Return the appropriate component based on itemType
-  if (itemType === "note") {
-    return <Notes selectedItem={selectedItem} />;
-  } else if (itemType === "password") {
-    return <Password selectedItem={selectedItem} />;
-  }
+  useEffect(() => {
+    // Ensure passwords and notes are arrays before trying to iterate over them
+    const validLogins = Array.isArray(logins) ? logins : [];
+    const validNotes = Array.isArray(notes) ? notes : [];
 
-  // Default case when no type is selected
-  return <h1 className="text-center">Please select a valid item type.</h1>;
+    console.log("selectedItem", selectedItem); // Log selectedItem to debug
+    console.log("logins", validLogins); // Log passwords to debug
+    console.log("notes", validNotes); // Log notes to debug
+
+    // Find the correct item based on selectedItem and itemType
+    let foundItem = null;
+    if (itemType === "logins") {
+      foundItem = validLogins.find((i) => i.id === selectedItem) || null;
+    } else if (itemType === "notes") {
+      foundItem = validNotes.find((i) => i.id === selectedItem) || null;
+    }
+
+    setItem(foundItem);
+  }, [selectedItem, itemType, logins, notes]);
+
+  return (
+    <div className="w-full h-full px-8 py-8">
+      {!item && <p>No item selected. Please select an item from the list.</p>}
+      {itemType === "notes" && item && <Notes selectedItem={item} />}
+      {itemType === "logins" && item && <Password selectedItem={item} />}
+    </div>
+  );
 }

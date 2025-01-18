@@ -6,6 +6,7 @@ import Button from "../components/Button";
 import ValidationRules from "../utils/validationRules";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../services/authService";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -27,10 +28,12 @@ const Register = () => {
       console.log("Registration successful:", data.msg);
 
       // Redirect to login page or dashboard upon success
+      toast.success(data.msg);
       navigate("/"); // Redirect to login page or dashboard
     } catch (err) {
       console.log("Registration failed:", err);
       setError(err); // Set error message if the registration fails
+      toast.error("Unable to register new user.");
     } finally {
       setLoading(false); // Reset loading state after request
     }
@@ -50,11 +53,9 @@ const Register = () => {
   );
 
   return (
-    <div className="w-full max-w-[50%] mx-auto flex flex-col gap-y-2 p-8 mt-10 rounded-md border shadow-mild bg-cardBackground">
-      <h2 className="w-full text-center mb-2 font-semibold text-2xl">
-        Register
-      </h2>
-      <form onSubmit={handleSubmit}>
+    <div className="w-full max-w-[50%] mx-auto flex flex-col gap-y-8 py-14 px-8 mt-10 rounded-md border bg-darkBackground text-darkText">
+      <h2 className="text-center text-2xl font-semibold ">Register</h2>
+      <form className="space-y-8" onSubmit={handleSubmit}>
         <InputField
           label="Username"
           type="text"

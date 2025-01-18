@@ -14,8 +14,8 @@ const SelectInput = ({ label, name, value, onChange, options, error }) => {
         name={name}
         value={value}
         onChange={onChange}
-        className={`mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-indigo-600 ${
-          error ? "border-red-500" : "border-gray-300"
+        className={`mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:secondary ${
+          error ? "border-error" : "border-lightText"
         }`}
       >
         <option value="">Select {label}</option>

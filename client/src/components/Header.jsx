@@ -1,16 +1,22 @@
 import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
-import AddForms from "../features/AddForms";
 import User from "./User/User";
+import AddItem from "../features/add-item";
+import hand from "../assets/hand.png";
+import { useSelector } from "react-redux";
 
 export default function Header() {
-  const { user, logout } = useAuth();
+  const user = useSelector((state) => state.user.user);
 
   return (
-    <div className="w-full bg-primary text-white">
-      <nav className="w-full max-w-[1440px] flex items-center px-8 py-4 justify-between gap-x-4 shadow-subtle">
-        <Link to="/">
+    <div className="w-full bg-darkBackground border-b-borderDark shadow-subtle">
+      <nav className="w-full max-w-[1440px] flex items-center px-8 py-4 justify-between gap-x-4 ">
+        <Link to="/" className="flex items-center gap-x-2 py-2 text-darkText">
+          <img
+            src={hand}
+            alt=""
+            className="w-6 h-6 object-contain text-darkText"
+          />
           <span className="w-auto ">Passthesalt</span>
         </Link>
 
@@ -21,10 +27,10 @@ export default function Header() {
             placeholder="Search..."
           />
         </div>
-        {user && user.username ? (
+        {user ? (
           <div className="flex gap-x-2">
-            <AddForms />
-            <User user={user} logout={logout} />
+            <AddItem />
+            <User user={user} />
           </div>
         ) : (
           <div className="w-auto flex items-center justify-end gap-x-4 ">

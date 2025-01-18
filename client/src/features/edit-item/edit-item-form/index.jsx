@@ -1,19 +1,21 @@
 import React, { useMemo, useState, useCallback } from "react";
-import InputField from "./InputField";
-import Button from "./Button";
-import useForm from "../hooks/useForm";
-import ValidationRules from "../utils/validationRules";
-import PasswordService from "../services/passwordService";
-import NoteService from "../services/noteService";
-import FolderService from "../services/folderService";
-import SelectInput from "./SelectInput";
-import { useGlobalState } from "../context/GlobalStateContext";
-const Form = ({ selectedMenu, onClose }) => {
+import InputField from "../../../components/InputField";
+import Button from "../../../components/Button";
+import useForm from "../../../hooks/useForm";
+import ValidationRules from "../../../utils/validationRules";
+import PasswordService from "../../../services/passwordService";
+import NoteService from "../../../services/noteService";
+import SelectInput from "../../../components/SelectInput";
+import { useDispatch, useSelector } from "react-redux";
+import { editLogin, editNote } from "../../../store/slice/userSlice";
+
+const EditItemForm = ({ type, item, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { state, dispatch } = useGlobalState();
-  const { folders, passwords, notes } = state;
-  console.log("HELLO...", folders);
+  const { folders } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  console.log("INITIAL VALUES...", item);
 
   // Ensure folders is always an array, fallback to an empty array if undefined
   const safeFolders = Array.isArray(folders) ? folders : [];
@@ -22,22 +24,22 @@ const Form = ({ selectedMenu, onClose }) => {
   const getFieldConfig = useCallback(() => {
     const commonFolderFields = [
       {
-        name: "folder",
+        name: "folder_id",
         label: "Folder",
         type: "select",
         options: safeFolders.map((folder) => ({
-          value: folder.id,
+          value: folder.id, // Ensure folder has 'id' and 'name'
           label: folder.name,
         })),
       },
     ];
 
     const fieldConfigs = {
-      password: [
+      login: [
         { name: "name", label: "Name", type: "text" },
         { name: "email", label: "Email", type: "email" },
         { name: "username", label: "Username", type: "text" },
-        { name: "password", label: "Password", type: "password" },
+        { name: "password", label: "Password", type: "text" },
         { name: "website", label: "Website", type: "text" },
         ...commonFolderFields,
       ],
@@ -46,66 +48,67 @@ const Form = ({ selectedMenu, onClose }) => {
         { name: "content", label: "Content", type: "text" },
         ...commonFolderFields,
       ],
-      folder: [
-        { name: "name", label: "Folder Name", type: "text" },
-        { name: "description", label: "Description", type: "text" },
-      ],
     };
 
-    return fieldConfigs[selectedMenu] || [];
-  }, [safeFolders, selectedMenu]);
+    return fieldConfigs[type] || [];
+  }, [safeFolders, type]);
 
+  // Set initialValues based on the `item` prop to pre-fill the form
   const initialValues = useMemo(() => {
     const values = {};
+    item;
+
+    // Use item values to pre-fill the form fields
     getFieldConfig().forEach((field) => {
-      values[field.name] = "";
+      if (item && item[field.name] !== undefined) {
+        values[field.name] = item[field.name]; // Set the value from the item prop
+      } else {
+        values[field.name] = ""; // Default empty value
+      }
     });
+
     return values;
-  }, [getFieldConfig]);
+  }, [getFieldConfig, item]);
 
   const validate = useMemo(() => {
-    switch (selectedMenu) {
-      case "password":
+    switch (type) {
+      case "login":
         return ValidationRules.validatePassword;
       case "secret_note":
         return ValidationRules.validateSecretNote;
-      case "folder":
-        return ValidationRules.validateFolder;
       default:
         return () => {};
     }
-  }, [selectedMenu]);
+  }, [type]);
 
   // Post request function for different menus
-  const postRequest = async (values) => {
+  const putRequest = async (values) => {
     try {
       setLoading(true);
       setError(null); // Reset previous errors
 
       let data;
-      switch (selectedMenu) {
-        case "password":
-          data = await PasswordService.addNewPassword(
+      switch (type) {
+        case "login":
+          data = await PasswordService.updatePassword(
+            item.id,
             values.name,
             values.username,
             values.email,
             values.password,
             values.website,
-            values.favorites,
             values.folder_id
           );
-          dispatch({ type: "ADD_PASSWORD", payload: data.login });
+          dispatch(editLogin(data.login));
           break;
         case "secret_note":
-          data = await NoteService.addNewNote(values.name, values.content);
-          dispatch({ type: "ADD_NOTE", payload: data.note });
-          break;
-        case "folder":
-          data = await FolderService.addNewFolder(
+          data = await NoteService.updateNote(
+            item.id,
             values.name,
-            values.description
+            values.content,
+            values.folder_id
           );
-          dispatch({ type: "ADD_FOLDER", payload: data.folder });
+          dispatch(editNote(data.note));
           break;
         default:
           throw new Error("Invalid menu selected");
@@ -129,10 +132,23 @@ const Form = ({ selectedMenu, onClose }) => {
     handleBlur,
     handleSubmit,
     isSubmitting,
-  } = useForm(initialValues, validate, postRequest);
+  } = useForm(initialValues || {}, validate, putRequest);
 
   const renderInputs = () => {
-    return getFieldConfig().map((field) => {
+    const fieldConfig = getFieldConfig();
+    if (!Array.isArray(fieldConfig)) {
+      console.error(
+        "Invalid field configuration returned from getFieldConfig:",
+        fieldConfig
+      );
+      return []; // Or an empty array to prevent the error
+    }
+    return fieldConfig.map((field) => {
+      if (!field || !field.name) {
+        console.error("Field is missing 'name' property:", field);
+        return null;
+      }
+
       if (field.type === "select") {
         return (
           <SelectInput
@@ -180,4 +196,4 @@ const Form = ({ selectedMenu, onClose }) => {
   );
 };
 
-export default Form;
+export default EditItemForm;

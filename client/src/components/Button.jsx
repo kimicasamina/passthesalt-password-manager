@@ -3,11 +3,11 @@ import React from "react";
 const Button = ({ disabled, label, onClick, loading, type = "button" }) => {
   const defaultStyles = `w-full px-4 py-2 rounded-lg focus:outline-none ${
     disabled
-      ? "bg-gray-400 cursor-not-allowed"
+      ? "bg-secondary cursor-not-allowed"
       : loading
-      ? "bg-blue-500 cursor-wait"
-      : "bg-blue-600 hover:bg-blue-700"
-  } text-white`;
+      ? "bg-secondary cursor-wait"
+      : "bg-primary hover:bg-secondary"
+  } text-darkText`;
 
   return (
     <button

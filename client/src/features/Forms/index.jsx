@@ -1,13 +1,13 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { FaKey, FaPlusCircle, FaRegStickyNote, FaFolder } from "react-icons/fa";
-import userModalDialog from "../../hooks/useModalDialog";
-import ModalDialog from "../ModalDialog";
-import Form from "../Form";
+import useModalDialog from "../../hooks/useModalDialog";
+import Modal from "../../components/Modal";
+import AddForm from "./add-form";
 
-export default function NewItem() {
+export default function Forms() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState(null);
-  const { isOpen, open, close } = userModalDialog();
+  const { isOpen, open, close } = useModalDialog();
 
   // Menu list definition
   const menuList = useMemo(
@@ -32,43 +32,6 @@ export default function NewItem() {
   );
 
   const dropdownRef = useRef(null);
-
-  // const handleSubmit = (values) => {
-  //   const onSubmit = async (values) => {
-  //     setLoading(true);
-  //     setError(null); // Reset previous errors
-  //     try {
-  //       const data = await AuthService.login(values.email, values.password);
-  //       login(data.user);
-  //       navigate("/");
-  //     } catch (error) {
-  //       console.error("Login failed:", error);
-  //       setError(error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  // };
-
-  // const onSubmit = async (values) => {
-  //   setLoading(true);
-  //   setError(null); // Reset previous errors
-  //   try {
-  //     const data = await AuthService.login(values.email, values.password);
-  //     login(data.user);
-  //     navigate("/");
-  //   } catch (error) {
-  //     console.error("Login failed:", error);
-  //     setError(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-
-  //   // Handle form submission based on selectedMenu
-  //   console.log("Form Submitted:", values);
-  //   close(); // Close modal after submission
-  // };
 
   // Close dropdown when clicking outside of it
   useEffect(() => {
@@ -122,7 +85,7 @@ export default function NewItem() {
         )}
       </div>
       {isOpen && (
-        <ModalDialog onClose={close}>
+        <Modal onClose={close}>
           <h1 className="text-lg font-semibold mb-4">
             {selectedMenu === "password"
               ? "Add New Password"
@@ -130,8 +93,9 @@ export default function NewItem() {
               ? "Add New Secret Note"
               : "Add New Folder"}
           </h1>
-          <Form selectedMenu={selectedMenu} onClose={onClose} />
-        </ModalDialog>
+          <AddForm selectedMenu={selectedMenu} onClose={close} />
+          {/* {children} */}
+        </Modal>
       )}
     </>
   );

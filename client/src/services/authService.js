@@ -22,7 +22,7 @@ const AuthService = {
     }
   },
 
-  async login(email, password) {
+  async loginUser(email, password) {
     try {
       const response = await axios.post(
         `${API_URL}/api/v2/auths/login`,
@@ -41,7 +41,7 @@ const AuthService = {
     }
   },
 
-  async logout() {
+  async logoutUser() {
     try {
       const response = await axios.delete(`${API_URL}/api/v2/auths/logout`, {
         withCredentials: true,
@@ -52,7 +52,7 @@ const AuthService = {
     }
   },
 
-  async getAuth() {
+  async getCurrentUser() {
     try {
       const response = await axios.get(`${API_URL}/api/v2/auths/me`, {
         withCredentials: true,

@@ -1,17 +1,16 @@
 import React, { useMemo, useState, useCallback } from "react";
-import InputField from "./InputField";
-import Button from "./Button";
-import useForm from "../hooks/useForm";
-import ValidationRules from "../utils/validationRules";
-import PasswordService from "../services/passwordService";
-import NoteService from "../services/noteService";
-import FolderService from "../services/folderService";
-import SelectInput from "./SelectInput";
-import { useGlobalState } from "../context/GlobalStateContext";
-const Form = ({ selectedMenu, onClose }) => {
+import InputField from "../../../components/InputField";
+import Button from "../../../components/Button";
+import useForm from "../../../hooks/useForm";
+import ValidationRules from "../../../utils/validationRules";
+import PasswordService from "../../../services/passwordService";
+import NoteService from "../../../services/noteService";
+import FolderService from "../../../services/folderService";
+import SelectInput from "../../../components/SelectInput";
+
+const AddForm = ({ selectedMenu, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { state, dispatch } = useGlobalState();
   const { folders, passwords, notes } = state;
   console.log("HELLO...", folders);
 
@@ -180,4 +179,4 @@ const Form = ({ selectedMenu, onClose }) => {
   );
 };
 
-export default Form;
+export default AddForm;

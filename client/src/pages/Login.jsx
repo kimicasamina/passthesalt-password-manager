@@ -1,30 +1,47 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, Navigate, redirect } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import ValidationRules from "../utils/validationRules";
 import useForm from "../hooks/useForm";
 import Button from "../components/Button";
 import InputField from "../components/InputField";
 import AuthService from "../services/authService";
+import toast from "react-hot-toast";
+import { login } from "../store/slice/authSlice";
+import { setInitialData } from "../store/slice/userSlice";
 
 const Login = () => {
-  const { user, login } = useAuth();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  // Redirect to home page if the user is already logged in
+  useEffect(() => {
+    if (user && user.username) {
+      navigate("/"); // Navigate to home if already logged in
+    }
+  }, [user, navigate]);
 
   const onSubmit = async (values) => {
     setLoading(true);
     setError(null); // Reset previous errors
+
     try {
-      const data = await AuthService.login(values.email, values.password);
-      login(data.user);
-      navigate("/");
+      const data = await AuthService.loginUser(values.email, values.password);
+      // Save token to localStorage
+      console.log("RESPONSE:", data);
+      const user = {
+        user: data.user,
+        ...data.user,
+      };
+      dispatch(setInitialData(user)); // Set the initial data in the store
+      toast.success(`Welcome, ${data.user.username}.`);
+      navigate("/"); // Navigate to the home page after successful login
     } catch (error) {
-      console.error("Login failed:", error);
-      setError(error);
-    } finally {
-      setLoading(false);
+      toast.error(error.message || "Failed to log in.");
+      setLoading(false); // Stop loading if there's an error
     }
   };
 
@@ -44,16 +61,10 @@ const Login = () => {
     onSubmit
   );
 
-  useEffect(() => {
-    if (user) {
-      navigate("/"); // If the user is already logged in, redirect to home
-    }
-  }, [user, navigate]);
-
   return (
-    <div className="w-full max-w-[50%] mx-auto flex flex-col gap-y-4 p-8 mt-10 rounded-md border shadow-mild bg-cardBackground">
-      <h2 className="text-center text-2xl font-semibold mb-4">Login</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="w-full max-w-[50%] mx-auto flex flex-col gap-y-8 py-14 px-8 mt-10 rounded-md border bg-darkBackground text-darkText">
+      <h2 className="text-center text-2xl font-semibold">Login</h2>
+      <form className="space-y-8" onSubmit={handleSubmit}>
         <InputField
           label="Email"
           type="email"
@@ -73,7 +84,6 @@ const Login = () => {
           error={errors.password}
         />
 
-        {/* Display login error message if any */}
         {!isSubmitting && error && (
           <div className="text-red-500 text-sm mt-2">{error}</div>
         )}

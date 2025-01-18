@@ -23,8 +23,8 @@ const InputField = ({
       value={value}
       onChange={onChange}
       onBlur={onBlur}
-      className={`w-full px-3 py-2 border shadow-md outline-none rounded-lg focus:outline-none text-black focus:ring-2 focus:ring-secondary ${
-        error ? "border-red-500" : "border-gray-300"
+      className={`w-full px-3 py-2 border outline-none rounded-lg focus:outline-none text-lightText focus:ring-2 focus:ring-secondary ${
+        error ? "border-error" : "border-borderDark"
       } ${customClass}`}
     />
     {error && <div className="text-red-500 text-xs mt-1">{error}</div>}
