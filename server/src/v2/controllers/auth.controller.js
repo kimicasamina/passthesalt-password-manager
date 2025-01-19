@@ -32,10 +32,9 @@ export const register = asyncHandler(async (req, res, next) => {
 
   res.cookie('access_token', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'Strict',
+    secure: process.env.NODE_ENV === 'production', // Use HTTPS in production
     maxAge: 3600000,
-    path: '/',
+    sameSite: 'None',
   });
 
   return res.status(201).json({
@@ -72,10 +71,9 @@ export const login = asyncHandler(async (req, res, next) => {
 
   res.cookie('access_token', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'Strict',
+    secure: process.env.NODE_ENV === 'production', // Use HTTPS in production
     maxAge: 3600000,
-    path: '/',
+    sameSite: 'None',
   });
 
   return res.status(200).json({
