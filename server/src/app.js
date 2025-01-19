@@ -26,7 +26,17 @@ app.use(
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(helmet());
-app.use(cors(corsOption));
+app.use(
+  cors({
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin:
+      process.env.NODE_ENV === 'production'
+        ? 'https://passthesalt-server.onrender.com'
+        : 'http://localhost:5173',
+    credentials: true,
+  }),
+);
 
 app.use('/api/v2/auths', authRoutes);
 app.use('/api/v2/logins', loginRoutes);
