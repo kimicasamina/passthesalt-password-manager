@@ -32,7 +32,7 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization'],
     origin:
       process.env.NODE_ENV === 'production'
-        ? 'https://passthesalt-server.onrender.com'
+        ? 'https://passthesalt-client.onrender.com'
         : 'http://localhost:5173',
     credentials: true,
   }),
