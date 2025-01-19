@@ -2,7 +2,7 @@ import { Login, User, Folder } from '../models';
 import asyncHandler from 'express-async-handler';
 
 // Create new Folder
-export const createFoler = asyncHandler(async (req, res) => {
+export const createFolder = asyncHandler(async (req, res) => {
   const { id } = req.user;
   const { name, description } = req.body;
 

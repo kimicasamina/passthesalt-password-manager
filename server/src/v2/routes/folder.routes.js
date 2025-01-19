@@ -1,6 +1,6 @@
 import express from 'express';
 import {
-  createFoler,
+  createFolder,
   updateFolder,
   deleteFolder,
   getFolderById,
@@ -11,7 +11,7 @@ import { authenticateJWT } from '../middlewares/auth.middleware.js';
 const router = express.Router();
 
 // Create a folder
-router.post('/', authenticateJWT, createFoler);
+router.post('/', authenticateJWT, createFolder);
 
 // Get a folder by ID
 router.get('/:id', authenticateJWT, getFolderById);

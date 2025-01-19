@@ -36,7 +36,7 @@ app.use(
     credentials: true,
   }),
 );
-app.use(helmet());
+// app.use(helmet());
 
 app.use('/api/v2/auths', authRoutes);
 app.use('/api/v2/logins', loginRoutes);
@@ -44,12 +44,12 @@ app.use('/api/v2/folders', folderRoutes);
 app.use('/api/v2/notes', noteRoutes);
 
 // Global error handler
-app.use(ErrorHandler);
+// app.use(ErrorHandler);
 
 // // global error handler
-// app.use('*', (err, req, res, next) => {
-//   console.error(err.stack);
-//   res.status(500).send(err.message);
-// });
+app.use('*', (err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send(err.message);
+});
 
 export default app;
