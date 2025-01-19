@@ -26,7 +26,7 @@ app.use(
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(helmet());
-app.use(corsOption);
+app.use(cors(corsOption));
 
 app.use('/api/v2/auths', authRoutes);
 app.use('/api/v2/logins', loginRoutes);
