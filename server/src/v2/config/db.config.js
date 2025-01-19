@@ -10,8 +10,14 @@ const dbConfig = {
     dialect: 'mysql',
   },
   production: {
-    url: process.env.POSTGRES_URL,
+    url: process.env.DB_URI,
     dialect: 'postgres',
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false, // Important for Render's self-signed certs
+      },
+    },
   },
 };
 
