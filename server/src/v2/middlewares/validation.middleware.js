@@ -3,6 +3,7 @@
 export const validate = (schema, location = 'body') => {
   return (req, res, next) => {
     const dataToValidate = req[location]; // Body, query, params, etc.
+    console.log('Validating inputs...', dataToValidate);
     const { error } = schema.validate(dataToValidate);
 
     if (error) {

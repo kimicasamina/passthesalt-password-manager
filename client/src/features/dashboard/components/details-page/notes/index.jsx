@@ -25,10 +25,10 @@ export default function Notes({ selectedItem }) {
 
   return (
     <div className="h-full w-full flex flex-col bg-lightBackground text-lightText gap-y-6">
-      <h2 className="text-2xl font-bold text-gray-800">{selectedItem?.name}</h2>
-      <p>{selectedItem?.content}</p>
+      <h2 className="text-2xl font-bold ">{selectedItem?.name}</h2>
+      <p className="text-base">{selectedItem?.content}</p>
 
-      <div className="flex flex-col gap-y-2">
+      <div className="flex flex-col gap-y-2 mt-20">
         <div className="flex flex-col gap-y-2">
           <span className="text-xs font-semibold text-primary">Created</span>
           <FormattedDate date={selectedItem?.createdAt} />

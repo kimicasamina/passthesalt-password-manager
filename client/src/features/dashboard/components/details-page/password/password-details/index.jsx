@@ -47,7 +47,7 @@ const PasswordDetails = ({ passwordData }) => {
 
   return (
     <div className="flex items-center">
-      <div className="flex-1 flex items-center ">
+      <div className="flex-1 flex items-center text-xs ">
         {/* Show the decrypted password if available and visibility is toggled */}
         {showDecryptedPassword ? decryptedPassword : "**********"}
       </div>

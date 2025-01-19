@@ -103,6 +103,8 @@ export default {
         subtle: "0 2px 6px rgba(0, 0, 0, 0.2)",
         mild: "0 2px 6px rgba(0, 0, 0, 0.3)",
         strong: "0 2px 6px rgba(0, 0, 0, 0.4)",
+        trello:
+          "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;",
       },
     },
   },

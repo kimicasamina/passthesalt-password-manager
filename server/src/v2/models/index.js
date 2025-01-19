@@ -9,12 +9,12 @@ const defineAssociations = () => {
   User.hasMany(Note, { foreignKey: 'user_id', as: 'notes' });
   User.hasMany(Folder, { foreignKey: 'user_id', as: 'folders' });
   Folder.hasMany(Login, { foreignKey: 'folder_id', as: 'logins' });
-  // Folder.hasMany(Note, { foreignKey: 'folder_id', as: 'notes' });
+  Folder.hasMany(Note, { foreignKey: 'folder_id', as: 'notes' });
 
   Login.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
   Login.belongsTo(Folder, { foreignKey: 'folder_id', as: 'folder' });
   Note.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
-  // Note.belongsTo(Folder, { foreignKey: 'folder_id', as: 'folder' });
+  Note.belongsTo(Folder, { foreignKey: 'folder_id', as: 'folder' });
 };
 
 defineAssociations();

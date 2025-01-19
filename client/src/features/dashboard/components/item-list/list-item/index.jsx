@@ -20,8 +20,10 @@ const ListItem = React.memo(
     return (
       <li className="w-full flex">
         <span
-          className={`w-full hover:text-secondary cursor-pointer ${
-            isSelected ? "text-secondary font-semibold" : "text-lightText"
+          className={`py-4 px-2 shadow-trello w-full rounded-sm cursor-pointer ${
+            isSelected
+              ? "text-darkText rounded-sm font-semibold bg-secondary border-secondary"
+              : "text-lightText hover:text-secondary"
           }`}
           onClick={handleOnClick}
         >

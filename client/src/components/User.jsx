@@ -3,7 +3,6 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { FaCog } from "react-icons/fa";
 import { FaSignOutAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import AuthService from "../../services/authService";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 

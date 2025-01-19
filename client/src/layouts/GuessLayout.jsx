@@ -6,7 +6,7 @@ export default function GuessLayout() {
   return (
     <div className="w-full max-w-[1440px] mx-auto h-screen flex flex-col bg-lightBackground">
       <Header />
-      <main className="w-full flex-1">
+      <main className="w-full h-full overflow-y-hidden">
         <Outlet />
       </main>
     </div>

@@ -30,7 +30,7 @@ export default function Container() {
   };
 
   return (
-    <div className="w-full h-full grid grid-cols-3">
+    <div className="w-full h-full grid grid-cols-3 bg-lightBackground">
       <SidebarMenu
         selectedMenu={selectedMenu}
         onSelect={handleSelectMenu}

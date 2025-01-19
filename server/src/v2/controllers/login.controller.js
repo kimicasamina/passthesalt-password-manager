@@ -1,11 +1,12 @@
 import { Login, User, Folder } from '../models';
 import asyncHandler from 'express-async-handler';
-import { encrypt } from '../utils/encryptionHandler';
+import { decrypt, encrypt } from '../utils/encryptionHandler';
 
 // Create a new login entry
 export const createLogin = asyncHandler(async (req, res) => {
   const { id } = req.user;
-  const { folder_id, name, email, username, password, website } = req.body;
+  const { folder_id, name, email, username, password, website, favorites } =
+    req.body;
 
   try {
     // Find the user and folder
@@ -22,7 +23,7 @@ export const createLogin = asyncHandler(async (req, res) => {
     // }
 
     // encrypt password before saving to database
-    const encryptedData = await encrypt(password);
+    // const encryptedData = await encrypt(password);
 
     // Create the note
     const login = await Login.create({
@@ -31,9 +32,10 @@ export const createLogin = asyncHandler(async (req, res) => {
       name,
       email,
       username,
-      password: encryptedData.password,
-      iv: encryptedData.iv, // Ensure iv is passed here
+      password: password,
+      iv: null, // Ensure iv is passed here
       website,
+      favorites,
     });
 
     return res.status(201).json({
@@ -62,6 +64,27 @@ export const deleteLogin = asyncHandler(async (req, res) => {
   return res.status(200).json({
     success: true,
     message: 'Login deleted successfully.',
+  });
+});
+
+// Decrypt Password
+export const decryptPassword = asyncHandler(async (req, res) => {
+  const decryptedPassword = await decrypt({
+    iv: req.body.iv,
+    password: req.body.password,
+  });
+
+  console.log('PASSWORD DETAILS: ', req.body);
+  console.log('DECRYPTED...', decryptedPassword);
+
+  if (!decryptedPassword) {
+    return res.status(404).json({ error: 'Password decryption failed.' });
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: 'Password successfully decrypted.',
+    password: decryptedPassword,
   });
 });
 

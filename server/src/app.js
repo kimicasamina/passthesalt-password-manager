@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import { corsOption } from './v2/utils/corsOption.js';
 import helmet from 'helmet';
 import authRoutes from './v2/routes/auth.routes.js';
 import loginRoutes from './v2/routes/login.routes.js';
@@ -17,14 +18,24 @@ const app = express();
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
 app.use(
   bodyParser.urlencoded({
     extended: true,
   }),
 );
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === 'production'
+        ? process.env.PASSTHESALT_CLIENT_URL
+        : 'http://localhost:5173', // Vite default port for development
+    // methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    // allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  }),
+);
 app.use(helmet());
 
 app.use('/api/v2/auths', authRoutes);
@@ -33,6 +44,12 @@ app.use('/api/v2/folders', folderRoutes);
 app.use('/api/v2/notes', noteRoutes);
 
 // Global error handler
-app.use(ErrorHandler);
+// app.use(ErrorHandler);
+
+// global error handler
+app.use('*', (err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send(err.message);
+});
 
 export default app;

@@ -98,14 +98,14 @@ export default function Password({ selectedItem }) {
 
       <div className="w-full flex gap-x-4 justify-end mt-auto">
         <button
-          className="flex gap-x-2 items-center px-4 py-2 rounded-sm bg-primary text-darkText hover:bg-secondary text-sm hover:text-lightText"
+          className="flex gap-x-2 items-center px-4 py-2 rounded-sm bg-primary text-darkText hover:bg-secondary text-xs hover:text-lightText"
           onClick={handleOpenEditModal}
         >
           <FaRegEdit className="w-4 h-4" />
           <span className="">Edit</span>
         </button>
         <button
-          className="flex gap-x-2 items-center px-4 py-2 rounded-sm bg-primary text-darkText hover:bg-secondary text-sm hover:text-lightText"
+          className="flex gap-x-2 items-center px-4 py-2 rounded-sm bg-primary text-darkText hover:bg-secondary text-xs hover:text-lightText"
           onClick={handleOpenDeleteModal}
         >
           <FaTrash className="w-4 h-4" />

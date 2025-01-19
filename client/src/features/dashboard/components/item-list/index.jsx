@@ -77,7 +77,7 @@ export default function ItemList({
     if (items.length === 0) return <h1>List is empty</h1>;
 
     return (
-      <ul className="w-full flex flex-col gap-y-2">
+      <ul className="w-full flex flex-col gap-y-4 h-full bg-lightBackground">
         {items.map((item) => (
           <ListItem
             key={item.id}
@@ -91,5 +91,9 @@ export default function ItemList({
     );
   };
 
-  return <div className="w-full h-full px-8 py-8">{renderList()}</div>;
+  return (
+    <div className="w-full h-full px-4 py-8 overflow-y-scroll scroll-hidden">
+      {renderList()}
+    </div>
+  );
 }

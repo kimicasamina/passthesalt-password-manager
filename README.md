@@ -31,191 +31,204 @@ Is a full-stack password manager application designed to securely store and retr
 - Database: PostgreSQL, Sequelize ORM
 - Security: AES Encryption, JWT, bcrypt
 
-#### Setup and Configurations for dev and prod
-
-1. install code dev
-
-```bash
-npm install express sequelize pg dotenv
+data sample
 
 ```
-
-2 Install dev dependencies
-
-```bash
-npm install --save-dev nodemon eslint prettier babel-eslint babel-preset-env
+"user": {
+        "id": "3d46fd02-2900-4f23-9220-0bbf6e8437df",
+        "email": "saucebot@gmail.com",
+        "username": "saucebot",
+        "logins": [
+            {
+                "id": "2f92951a-1e23-4110-96ac-6c3ed72602c2",
+                "name": "Day 1",
+                "email": "saucebot@gmail.com",
+                "username": "saucebot",
+                "password": "856fc58a7ba8dc9782c00d0f72bb3cb3",
+                "iv": "1e875f8af3dae031cf8717a73f47883a",
+                "website": "www.day1.com",
+                "favorites": false,
+                "createdAt": "2025-01-19T06:47:39.000Z",
+                "updatedAt": "2025-01-19T06:47:39.000Z",
+                "user_id": "3d46fd02-2900-4f23-9220-0bbf6e8437df",
+                "folder_id": null
+            },
+            {
+                "id": "3ba8050e-5919-45aa-82b0-6dffd36a5fbb",
+                "name": "Get to work",
+                "email": "hellooo@gmail.com",
+                "username": "hellooo",
+                "password": "c3d315d6ce22c984f22748139664a30357b6e3e1c2f29cf295669a7c0560d37e",
+                "iv": "fa28c3db3e413b75b404bc9b3a9e6952",
+                "website": "www.gettowork.com",
+                "favorites": false,
+                "createdAt": "2025-01-19T06:59:55.000Z",
+                "updatedAt": "2025-01-19T06:59:55.000Z",
+                "user_id": "3d46fd02-2900-4f23-9220-0bbf6e8437df",
+                "folder_id": null
+            },
+            {
+                "id": "45800003-8452-47e2-a55b-7974420bf462",
+                "name": "Habitica",
+                "email": "saucebot@gmail.com",
+                "username": "saucebot",
+                "password": "6505c327db70422e16f36d4316b152da",
+                "iv": "1b7089e4a05bdbf6696099ece63a4307",
+                "website": "www.habitica.com",
+                "favorites": false,
+                "createdAt": "2025-01-19T07:01:17.000Z",
+                "updatedAt": "2025-01-19T07:01:17.000Z",
+                "user_id": "3d46fd02-2900-4f23-9220-0bbf6e8437df",
+                "folder_id": null
+            },
+            {
+                "id": "7950ea4a-2e8e-4b12-9157-a8ffe672aa6f",
+                "name": "Github",
+                "email": "saucebot@gmail.com",
+                "username": "saucebot",
+                "password": "fae70f1a77f35aadd9fae74f7a79e4cb",
+                "iv": "b325e2f94911d18b74c6bc672f6783ee",
+                "website": "www.github.com",
+                "favorites": false,
+                "createdAt": "2025-01-19T06:44:25.000Z",
+                "updatedAt": "2025-01-19T06:44:25.000Z",
+                "user_id": "3d46fd02-2900-4f23-9220-0bbf6e8437df",
+                "folder_id": null
+            },
+            {
+                "id": "b41828f3-d0f9-4f8f-b114-727de90b8756",
+                "name": "Netflix",
+                "email": "hellooo@gmail.com",
+                "username": "hellooo",
+                "password": "9a0967fafb4b1f052f57021544c0029e",
+                "iv": "e9f3253f1ac8460ee14d82e37c9c4f8a",
+                "website": "www.netflix.com",
+                "favorites": false,
+                "createdAt": "2025-01-19T06:59:16.000Z",
+                "updatedAt": "2025-01-19T06:59:16.000Z",
+                "user_id": "3d46fd02-2900-4f23-9220-0bbf6e8437df",
+                "folder_id": null
+            },
+            {
+                "id": "b8b648e0-3d79-4ce7-ba4e-c6dca7d67eef",
+                "name": "Notion",
+                "email": "hellooo@gmail.com",
+                "username": "hellooo",
+                "password": "60723cd6dbb50a3eec8a63fc0b01cbdf",
+                "iv": "d4cb2c445c15cb520e6e52693246ce13",
+                "website": "www.notion.com",
+                "favorites": false,
+                "createdAt": "2025-01-19T07:00:27.000Z",
+                "updatedAt": "2025-01-19T07:00:27.000Z",
+                "user_id": "3d46fd02-2900-4f23-9220-0bbf6e8437df",
+                "folder_id": null
+            },
+            {
+                "id": "e1fb9f58-0917-4db0-83b1-4195cca42283",
+                "name": "Spotify",
+                "email": "hellooo@gmail.com",
+                "username": "hellooo",
+                "password": "38f8ec640f2c1cc4148cea6dc41ccc0f",
+                "iv": "2d41823a22874d9652c92e3603cb7959",
+                "website": "www.spotify.com",
+                "favorites": false,
+                "createdAt": "2025-01-19T07:00:56.000Z",
+                "updatedAt": "2025-01-19T07:00:56.000Z",
+                "user_id": "3d46fd02-2900-4f23-9220-0bbf6e8437df",
+                "folder_id": null
+            },
+            {
+                "id": "f1876b0b-8298-44b4-954f-4658d430fad2",
+                "name": "Steam",
+                "email": "saucebot@gmail.com",
+                "username": "saucebot",
+                "password": "a65526ba27647d05066a9f53e14d27e0",
+                "iv": "602249073ff0a379e9f620bd17082742",
+                "website": "www.steam.com",
+                "favorites": false,
+                "createdAt": "2025-01-19T06:48:20.000Z",
+                "updatedAt": "2025-01-19T06:48:20.000Z",
+                "user_id": "3d46fd02-2900-4f23-9220-0bbf6e8437df",
+                "folder_id": null
+            },
+            {
+                "id": "f7d240db-b625-481d-9beb-5beaa2d5a912",
+                "name": "Youtube",
+                "email": "saucebot@gmail.com",
+                "username": "saucebot",
+                "password": "fa5a32423d21f170b88ef1f99608995c",
+                "iv": "37b7be11dcd1185efb1bcd048c82a8d5",
+                "website": "www.youtube.com",
+                "favorites": false,
+                "createdAt": "2025-01-19T06:58:38.000Z",
+                "updatedAt": "2025-01-19T06:58:38.000Z",
+                "user_id": "3d46fd02-2900-4f23-9220-0bbf6e8437df",
+                "folder_id": null
+            }
+        ],
+        "notes": [
+            {
+                "id": "0c46380a-99eb-419c-bc85-2afab22c3ff1",
+                "name": "House Wifi Key",
+                "content": "53A02-LH2039-G3950S",
+                "favorites": false,
+                "createdAt": "2025-01-19T06:46:21.000Z",
+                "updatedAt": "2025-01-19T06:46:21.000Z",
+                "user_id": "3d46fd02-2900-4f23-9220-0bbf6e8437df",
+                "folder_id": null
+            },
+            {
+                "id": "e1e0b432-f8df-4a7e-8778-c21b62be9d73",
+                "name": "SECRET KEY",
+                "content": "827F-FJF8-03NV",
+                "favorites": false,
+                "createdAt": "2025-01-19T06:47:12.000Z",
+                "updatedAt": "2025-01-19T06:47:12.000Z",
+                "user_id": "3d46fd02-2900-4f23-9220-0bbf6e8437df",
+                "folder_id": null
+            }
+        ],
+        "folders": [
+            {
+                "id": "09244020-6a00-4660-ba50-0f8c481a7dc4",
+                "name": "Productivity Tools",
+                "description": "",
+                "createdAt": "2025-01-19T06:45:26.000Z",
+                "updatedAt": "2025-01-19T06:45:26.000Z",
+                "user_id": "3d46fd02-2900-4f23-9220-0bbf6e8437df",
+                "notes": [],
+                "logins": []
+            },
+            {
+                "id": "51912b22-2b07-421d-bfea-eea4eae788e6",
+                "name": "Streaming Services",
+                "description": "",
+                "createdAt": "2025-01-19T06:45:10.000Z",
+                "updatedAt": "2025-01-19T06:45:10.000Z",
+                "user_id": "3d46fd02-2900-4f23-9220-0bbf6e8437df",
+                "notes": [],
+                "logins": []
+            },
+            {
+                "id": "5fb897cf-fb52-4d61-8819-df388b0bf0eb",
+                "name": "Games",
+                "description": "",
+                "createdAt": "2025-01-19T06:44:32.000Z",
+                "updatedAt": "2025-01-19T06:44:32.000Z",
+                "user_id": "3d46fd02-2900-4f23-9220-0bbf6e8437df",
+                "notes": [],
+                "logins": []
+            },
+            {
+                "id": "afde69a4-d75e-402b-afb7-d1d1c6d812dc",
+                "name": "Socmed",
+                "description": "social media accounts",
+                "createdAt": "2025-01-19T06:44:48.000Z",
+                "updatedAt": "2025-01-19T06:44:48.000Z",
+                "user_id": "3d46fd02-2900-4f23-9220-0bbf6e8437df",
+                "notes": [],
+                "logins": []
+            }
+        ]
+    }
 ```
-
-#### Configure babel (for es6 imports)
-
-1. install babel
-
-```bash
-npm install --save-dev @babel/core @babel/cli @babel/preset-env @babel/register
-```
-
-2. Create a .babelrc or babel.config.js file
-
-````js
-// babel.config.js
-module.exports = {
-  presets: [
-    "@babel/preset-env", // Allows you to use modern JavaScript (ES6+)
-  ],
-  plugins: [
-    "@babel/plugin-proposal-class-properties",
-    "@babel/plugin-transform-runtime",
-  ],
-};
-```
-
-3. Add babel to script for development
-```js
-"scripts": {
-  "dev": "nodemon -r @babel/register src/server.js",
-  "start": "node src/server.js"
-}
-```
-
-#### Linting and Formatting setup
-
-4. Setup prettier and eslint for formatter and linting
-
-```bash
-npm install --save-dev eslint prettier eslint-config-prettier eslint-plugin-prettier
-```
-
-5. Eslint config
-
-```json
-// .eslintrc.json
-{
-  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
-  "env": {
-    "node": true,
-    "es2021": true
-  },
-  "rules": {
-    "no-console": "warn",
-    "prettier/prettier": "error"
-  }
-}
-```
-
-6. Prettier config
-
-```json
-// .prettierrc
-{
-  "semi": true,
-  "singleQuote": true,
-  "trailingComma": "all"
-}
-```
-7. add lint to script including
-```js
-"scripts": {
-  "dev": "nodemon -r @babel/register src/server.js",
-  "lint": "eslint src --fix",
-  "start": "node src/server.js"
-}
-```
-
-#### Set Up Babel for Transpiling in Production
-1. Install Babel minification plugin
-```bash
-npm install --save-dev @babel/plugin-transform-runtime @babel/preset-env babel-minify
-```
-2. Configure Babel for production
-```js
-// babel.config.js
-module.exports = {
-  presets: [
-    '@babel/preset-env', // Enables the use of modern JavaScript (ES6+)
-  ],
-  plugins: [
-    '@babel/plugin-transform-runtime', // Handles async/await and generator functions
-    'babel-plugin-minify-dead-code-elimination', // Remove dead code
-    'babel-plugin-minify-constant-folding', // Minify constant folding
-  ],
-};
-```
-#### Set Up Webpack for Code Bundling and Minification
-1. Install webpack and related dependencies
-```bash
-npm install --save-dev webpack webpack-cli webpack-node-externals babel-loader terser-webpack-plugin
-```
-- webpack-node-externals: This excludes node_modules from being bundled, as they don’t need to be bundled for a server-side application.
-- terser-webpack-plugin: Minifies the JavaScript files during the bundling process.
-
-2. Create Webpack Configuration
-```js
-// webpack.config.js
-const path = require('path');
-const nodeExternals = require('webpack-node-externals');
-const TerserPlugin = require('terser-webpack-plugin');
-
-module.exports = {
-  target: 'node', // Make sure to bundle for Node.js environment
-  entry: './src/server.js', // Entry point for the app
-  output: {
-    path: path.resolve(__dirname, 'dist'), // Output folder for bundled files
-    filename: 'server.bundle.js', // Output filename
-    libraryTarget: 'commonjs2', // Specify commonjs2 for Node.js
-  },
-  externals: [nodeExternals()], // Exclude node_modules from the bundle
-  mode: 'production', // Ensure production mode for optimization
-  optimization: {
-    minimize: true, // Minify the output
-    minimizer: [new TerserPlugin()], // Use Terser for JavaScript minification
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js$/, // Apply Babel transpiling to JavaScript files
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-            plugins: [
-              '@babel/plugin-transform-runtime',
-              'babel-plugin-minify-dead-code-elimination',
-            ],
-          },
-        },
-      },
-    ],
-  },
-};
-```
-
-4. Update package.json
-```js
-"scripts": {
-    "dev": "nodemon -r @babel/register src/server.js", // For development
-    "build": "webpack --config webpack.config.js",     // Build for production
-    "start": "node dist/server.bundle.js"              // Start production server
-  }
-```
-
-
-### TODO:
-
-1. [] - Minify and transpile the code.
-2. [] - Secure environment variables using .env.
-3. [] - Monitor and handle errors using tools like winston or pino.
-
-### pm2 to run the app in production
-
-npx pm2 start dist/server.bundle.js --name "my-node-app"
-
-script
-"dev": "NODE_ENV=development nodemon src/index.js",
-"start:prod": "NODE_ENV=production babel-node src/index.js",
-"start:dev": "nodemon --exec babel-node src/index.js",
-"start": "node dist/index.js",
-"build": "babel src -d dist",
-"db:migrate": "sequelize --config sequelize.js db:migrate",
-"db:seed": "npx sequelize-cli db:seed:all",
-````

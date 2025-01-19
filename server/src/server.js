@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 5555;
 
 const startServer = async () => {
   try {
-    await sequelize.authenticate();
+    await sequelize.sync({ force: true });
     console.log('Database connected successfully');
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

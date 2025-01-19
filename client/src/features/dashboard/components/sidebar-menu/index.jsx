@@ -14,7 +14,7 @@ export default function SidebarMenu({ selectedMenu, onSelect, folders }) {
   );
 
   return (
-    <div className="w-full h-full bg-darkBackground px-8 py-8">
+    <div className="w-full h-full bg-darkBackground pr-4 pl-8 py-8">
       <h2 className="text-xs font-semibold text-secondary mb-2">Menu</h2>
       <ul className="flex flex-col gap-y-0 mb-10">
         {menuList.map((item) => (

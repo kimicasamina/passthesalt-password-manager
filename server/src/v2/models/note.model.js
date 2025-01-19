@@ -18,6 +18,10 @@ const Note = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    favorites: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
     // folder_id: {
     //   type: DataTypes.UUID,
     //   allowNull: true,

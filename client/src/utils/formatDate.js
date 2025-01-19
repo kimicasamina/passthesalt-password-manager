@@ -24,5 +24,6 @@ export const formatDate = (dateInput) => {
 
   // Split the formatted date into parts and adjust the format
   const [month, day, year, time, ampm] = formattedDate.split(/[\s,]+/);
-  return `${month}. ${day}, ${year} ${time} ${ampm.toLowerCase()}`;
+  // return `${month}. ${day}, ${year} ${time} ${ampm.toLowerCase()}`;
+  return `${month}. ${day}, ${year} `;
 };

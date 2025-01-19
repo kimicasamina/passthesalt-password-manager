@@ -21,6 +21,13 @@ export const authenticateJWT = expressAsyncHandler(async (req, res, next) => {
     // Verify the JWT token and decode it
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+    if (!decoded) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid token.',
+      });
+    }
+
     // Attach decoded user info to req.user
     req.user = decoded; // { id, email, username }
 

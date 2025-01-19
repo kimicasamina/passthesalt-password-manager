@@ -99,7 +99,7 @@ export const getAllFolder = asyncHandler(async (req, res) => {
 
   const folders = await Folder.findAll({
     where: { user_id: id },
-    // include: ['user', 'folder'], // Including associated User and Folder
+    include: ['notes', 'logins'], // Including associated User and Folder
   });
 
   if (!folders) {

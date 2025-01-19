@@ -30,7 +30,7 @@ export default function DetailsPage({ selectedItem, itemType }) {
   }, [selectedItem, itemType, logins, notes]);
 
   return (
-    <div className="w-full h-full px-8 py-8">
+    <div className="w-full h-full pl-4 pr-8 py-8 bg-lightBackground">
       {!item && <p>No item selected. Please select an item from the list.</p>}
       {itemType === "notes" && item && <Notes selectedItem={item} />}
       {itemType === "logins" && item && <Password selectedItem={item} />}

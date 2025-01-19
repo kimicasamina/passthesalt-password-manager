@@ -4,11 +4,11 @@ import asyncHandler from 'express-async-handler';
 // Create a new note entry
 export const createNote = asyncHandler(async (req, res) => {
   const { id } = req.user;
-  const { folder_id, name, content } = req.body;
+  const { folder_id, name, content, favorites } = req.body;
 
   try {
     // Find the user and folder
-    const user = await User.findByPk(user_id);
+    const user = await User.findByPk(id);
     const folder = folder_id ? await Folder.findByPk(folder_id) : null;
 
     if (!user) {
@@ -22,10 +22,11 @@ export const createNote = asyncHandler(async (req, res) => {
 
     // Create the note
     const note = await Note.create({
-      user_id,
+      user_id: user.id,
       folder_id: folder ? folder.id : null,
       name,
       content,
+      favorites,
     });
 
     return res.status(201).json({

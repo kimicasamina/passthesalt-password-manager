@@ -15,5 +15,5 @@ export default function FormattedDate({ date }) {
     formattedDate = "Invalid Date";
   }
 
-  return <span className="text-sm">{formattedDate}</span>;
+  return <span className="text-xs">{formattedDate}</span>;
 }

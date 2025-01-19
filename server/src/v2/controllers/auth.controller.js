@@ -49,12 +49,13 @@ export const register = asyncHandler(async (req, res, next) => {
 export const login = asyncHandler(async (req, res, next) => {
   const user = await AuthService.findUserByEmail(req.body.email);
   // if (!user) throw new Error('User not found.', 404); // Throw a custom error with statusCode
-  // if (!user)
-  //   // return next(new CustomError('User not found.', 404));
-  //   return res.status(400).json({
-  //     success: false,
-  //     message: 'User not found',
-  //   });
+  if (!user) {
+    return res.status(400).json({
+      success: false,
+      message: 'User not found',
+    });
+    // return next(new CustomError('User not found.', 404));
+  }
 
   const isPasswordCorrect = await comparePassword(
     req.body.password,
@@ -81,6 +82,7 @@ export const login = asyncHandler(async (req, res, next) => {
     success: true,
     message: 'User logged in successfully.',
     token,
+    user,
   });
 });
 

@@ -29,10 +29,14 @@ const Login = sequelize.define(
     },
     iv: {
       type: DataTypes.STRING,
-      allowNull: false, // iv cannot be null
+      allowNull: true, // iv cannot be null
     },
     website: {
       type: DataTypes.STRING,
+    },
+    favorites: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
     // folder_id: {
     //   type: DataTypes.UUID,
@@ -46,30 +50,30 @@ const Login = sequelize.define(
   {
     timestamps: true,
     hooks: {
-      // beforeCreate: async (login) => {
-      //   try {
-      //     // Encrypt the password before saving to the database
-      //     const encryptedData = await encrypt(login.password);
-      //     login.password = encryptedData.password; // Store the encrypted password
-      //     login.iv = encryptedData.iv; // Store the IV
-      //   } catch (error) {
-      //     console.error('Error encrypting password:', error);
-      //     throw new Error('Failed to encrypt password');
-      //   }
-      // },
-      // beforeUpdate: async (login) => {
-      //   if (login.changed('password')) {
-      //     try {
-      //       // Encrypt password if it has changed
-      //       const encryptedData = await encrypt(login.password);
-      //       login.password = encryptedData.password;
-      //       login.iv = encryptedData.iv;
-      //     } catch (error) {
-      //       console.error('Error encrypting password:', error);
-      //       throw new Error('Failed to encrypt password');
-      //     }
-      //   }
-      // },
+      beforeCreate: async (login) => {
+        try {
+          // Encrypt the password before saving to the database
+          const encryptedData = await encrypt(login.password);
+          login.password = encryptedData.password; // Store the encrypted password
+          login.iv = encryptedData.iv; // Store the IV
+        } catch (error) {
+          console.error('Error encrypting password:', error);
+          throw new Error('Failed to encrypt password');
+        }
+      },
+      beforeUpdate: async (login) => {
+        if (login.changed('password')) {
+          try {
+            // Encrypt password if it has changed
+            const encryptedData = await encrypt(login.password);
+            login.password = encryptedData.password;
+            login.iv = encryptedData.iv;
+          } catch (error) {
+            console.error('Error encrypting password:', error);
+            throw new Error('Failed to encrypt password');
+          }
+        }
+      },
     },
   },
 );
