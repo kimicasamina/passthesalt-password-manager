@@ -5,6 +5,8 @@ import { FaSignOutAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
+import { logout } from "../store/slice/userSlice";
+import AuthService from "../services/authService";
 
 export default function User({ user }) {
   const dispatch = useDispatch();

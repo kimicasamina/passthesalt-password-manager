@@ -1,11 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, Navigate } from "react-router-dom";
 import AuthService from "../services/authService";
 import { setInitialData } from "../store/slice/userSlice";
+import LoadingPage from "../components/LoadingPage";
 
 export default function ProtectedLayout() {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
   const user = useSelector((state) => state.user.user); // Ensure you are accessing `user` data
 
   console.log("USER", user);
@@ -13,6 +15,7 @@ export default function ProtectedLayout() {
 
   useEffect(() => {
     const fetchUserData = async () => {
+      setLoading(true);
       try {
         const data = await AuthService.getCurrentUser();
         const user = {
@@ -22,16 +25,26 @@ export default function ProtectedLayout() {
         dispatch(setInitialData(user)); // Dispatch user data
       } catch (error) {
         console.error("Failed to fetch user data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    // Only fetch user data if it's not already in the store
-    if (!user) {
+    if (!user && loading) {
       fetchUserData();
+    } else {
+      setLoading(false);
     }
-  }, [user, dispatch]);
+  }, [user, dispatch, loading]);
 
-  // Loading state while waiting for user data
+  //
+
+  // If still loading, don't redirect yet
+  if (loading) {
+    return <LoadingPage />;
+  }
+
+  // If no user data is available after fetching, redirect to login page
   if (!user) {
     return <Navigate to="/login" />;
   }
