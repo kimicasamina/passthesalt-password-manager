@@ -25,18 +25,8 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(
-  cors({
-    origin:
-      process.env.NODE_ENV === 'production'
-        ? process.env.FRONTEND_CLIENT_URL
-        : 'http://localhost:5173', // Vite default port for development
-    // methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    // allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  }),
-);
-// app.use(helmet());
+app.use(helmet());
+app.use(corsOption);
 
 app.use('/api/v2/auths', authRoutes);
 app.use('/api/v2/logins', loginRoutes);

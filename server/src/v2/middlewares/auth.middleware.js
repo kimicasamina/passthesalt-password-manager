@@ -10,6 +10,8 @@ export const authenticateJWT = expressAsyncHandler(async (req, res, next) => {
     req.cookies.access_token ||
     req.header('Authorization')?.replace('Bearer ', ''); // Extract token from either cookies or header
 
+  console.log('Token received:', token);
+
   if (!token) {
     return res.status(400).json({
       success: false,
@@ -34,6 +36,7 @@ export const authenticateJWT = expressAsyncHandler(async (req, res, next) => {
     // Proceed to the next middleware/controller
     next();
   } catch (err) {
+    console.error('Token verification failed:', err);
     return res.status(400).json({
       success: false,
       message: 'Invalid or expired token.',

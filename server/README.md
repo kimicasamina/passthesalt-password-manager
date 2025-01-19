@@ -1,18 +1,18 @@
 # Passthesalt password manager Restful API
 
 ## TODO:
-1. [] - Setup babel, webpack, linting and formatting
-2. [] - Setup git and github workflow
-3. [] - Connect to the database
-4. [] - Create models and associations
-5. [] - Implement authentications and Authorization
-6. [] - Secure the server 
-7. [] - Deploy to hosting platform
-8. [] - Implement validations 
-9. [] - Error handler and custom error
+
+1. [x] - Setup babel, webpack, linting and formatting
+2. [x] - Setup git and github workflow
+3. [x] - Connect to the database
+4. [x] - Create models and associations
+5. [x] - Implement authentications and Authorization
+6. [x] - Secure the server
+7. [x] - Deploy to hosting platform
+8. [x] - Implement validations
+9. [x] - Error handler and custom error
 10. [] - Monitor and handler errors using winston or pino
 11. [] - Testing
-
 
 ### 1. Setup and Configurations for dev and prod
 
@@ -43,16 +43,17 @@ npm install --save-dev @babel/core @babel/cli @babel/preset-env @babel/register
 // babel.config.js
 module.exports = {
   presets: [
-    "@babel/preset-env", // Allows you to use modern JavaScript (ES6+)
+    '@babel/preset-env', // Allows you to use modern JavaScript (ES6+)
   ],
   plugins: [
-    "@babel/plugin-proposal-class-properties",
-    "@babel/plugin-transform-runtime",
+    '@babel/plugin-proposal-class-properties',
+    '@babel/plugin-transform-runtime',
   ],
 };
 ```
 
 3. Add babel to script for development
+
 ```js
 "scripts": {
   "dev": "nodemon -r @babel/register src/server.js",
@@ -86,6 +87,7 @@ npm install --save-dev eslint prettier eslint-config-prettier eslint-plugin-pret
 ```
 
 3. Prettier config
+
 ```json
 // .prettierrc
 {
@@ -96,6 +98,7 @@ npm install --save-dev eslint prettier eslint-config-prettier eslint-plugin-pret
 ```
 
 4. add lint to script including
+
 ```js
 "scripts": {
   "dev": "nodemon -r @babel/register src/server.js",
@@ -105,11 +108,15 @@ npm install --save-dev eslint prettier eslint-config-prettier eslint-plugin-pret
 ```
 
 #### Set Up Babel for Transpiling in Production
+
 1. Install Babel minification plugin
+
 ```bash
 npm install --save-dev @babel/plugin-transform-runtime @babel/preset-env babel-minify
 ```
+
 2. Configure Babel for production
+
 ```js
 // babel.config.js
 module.exports = {
@@ -123,15 +130,20 @@ module.exports = {
   ],
 };
 ```
+
 #### Set Up Webpack for Code Bundling and Minification
+
 1. Install webpack and related dependencies
+
 ```bash
 npm install --save-dev webpack webpack-cli webpack-node-externals babel-loader terser-webpack-plugin
 ```
+
 - webpack-node-externals: This excludes node_modules from being bundled, as they don’t need to be bundled for a server-side application.
 - terser-webpack-plugin: Minifies the JavaScript files during the bundling process.
 
 2. Create Webpack Configuration
+
 ```js
 // webpack.config.js
 const path = require('path');
@@ -174,6 +186,7 @@ module.exports = {
 ```
 
 3. Update package.json
+
 ```js
 "scripts": {
     "dev": "nodemon -r @babel/register src/server.js", // For development
@@ -181,30 +194,3 @@ module.exports = {
     "start": "node dist/server.bundle.js"              // Start production server
   }
 ```
-
-
-
-script
-"dev": "NODE_ENV=development nodemon src/index.js",
-"start:prod": "NODE_ENV=production babel-node src/index.js",
-"start:dev": "nodemon --exec babel-node src/index.js",
-"start": "node dist/index.js",
-"build": "babel src -d dist",
-"db:migrate": "sequelize --config sequelize.js db:migrate",
-"db:seed": "npx sequelize-cli db:seed:all",
-````
-
-
-
-
-
-### 2. Setup Github and Git workflow
-### 3. Connect to the database
-### 4. Create models and associations
-### 5. Implement authentications and Authorization
-### 6. Secure the server 
-### 7. Deploy to hosting platform
-### 8. Implement validations 
-### 9. Error handler and custom error
-### 10. Monitor and handler errors using winston or pino
-
