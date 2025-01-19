@@ -29,7 +29,7 @@ app.use(
   cors({
     origin:
       process.env.NODE_ENV === 'production'
-        ? process.env.PASSTHESALT_CLIENT_URL
+        ? process.env.FRONTEND_CLIENT_URL
         : 'http://localhost:5173', // Vite default port for development
     // methods: ['GET', 'POST', 'PUT', 'DELETE'],
     // allowedHeaders: ['Content-Type', 'Authorization'],

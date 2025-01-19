@@ -1,9 +1,9 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
 
 module.exports = {
   development: {
-    dialect: "mysql",
+    dialect: 'mysql',
     use_env_variable: process.env.DATABASE_URL,
     dialectOptions: {
       ssl: {
@@ -13,8 +13,8 @@ module.exports = {
     },
   },
   test: {
-    dialect: "postgres",
-    use_env_variable: "POSTGRES_URL",
+    dialect: 'postgres',
+    use_env_variable: 'POSTGRES_URL',
     dialectOptions: {
       ssl: {
         require: true,
@@ -23,12 +23,12 @@ module.exports = {
     },
   },
   production: {
-    dialect: "postgres",
-    use_env_variable: "POSTGRES_URL",
+    dialect: 'postgres',
+    use_env_variable: 'DB_URI',
     dialectOptions: {
       ssl: {
-        require: "true",
-        native: "true",
+        require: 'true',
+        native: 'true',
       },
     },
   },

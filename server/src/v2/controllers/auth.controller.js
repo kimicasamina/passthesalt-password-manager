@@ -82,7 +82,14 @@ export const login = asyncHandler(async (req, res, next) => {
     success: true,
     message: 'User logged in successfully.',
     token,
-    user,
+    user: {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      logins: user.logins,
+      folders: user.folders,
+      notes: user.notes,
+    },
   });
 });
 
@@ -109,20 +116,17 @@ export const getUserDetails = asyncHandler(async (req, res, next) => {
       // return next(createError('User not found.', 404)); // Handle user not found
     }
 
-    // Prepare the user data excluding internal fields
-    const userData = {
-      id: user.id,
-      email: user.email,
-      username: user.username,
-      logins: user.logins,
-      notes: user.notes,
-      folders: user.folders,
-    };
-
     return res.status(200).json({
       success: true,
       message: 'User details retrieved successfully.',
-      user: userData,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        logins: user.logins,
+        notes: user.notes,
+        folders: user.folders,
+      },
     });
   } catch (error) {
     next(error); // Pass any errors to the error handler
